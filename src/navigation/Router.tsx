@@ -19,6 +19,25 @@ interface Props {
 
 export default function Router({ history, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
+
+  React.useEffect(() => {
+    console.log("useEffect listen");
+    const unlisten = history.listen((location) => {
+      console.log("setLocation", location);
+      setLocation(location);
+    });
+
+    return () => unlisten();
+  });
+
+  React.useEffect(() => {
+    window.addEventListener("popstate", () => {
+      const { path } = window.history.state;
+      console.log("popstate", window.history.state);
+      setLocation(path);
+    });
+  }, []);
+
   return (
     <RouterContext.Provider value={{ location }}>
       <HistoryContextProvider history={history}>

@@ -1,17 +1,20 @@
 import React from "react";
 
-interface Arguments {}
-type Handler = (args: Arguments) => void;
+type Handler = (location: string) => void;
 
 export const createHistory = () => {
   const listenres = createEvents();
   const history = {
     listen(listener: Handler) {
+      console.log("history listen");
       const removeListener = listenres.push(listener);
       return removeListener;
     },
     push(path: string) {
+      console.log("history push", path);
+      console.log("window.history", window.history);
       window.history.pushState({ path }, "", path);
+      listenres.call(path);
     },
   };
 
@@ -23,14 +26,16 @@ function createEvents() {
 
   return {
     push(func: Handler) {
+      console.log("handlers push", handlers.length + 1);
       handlers.push(func);
       const removeHandler = () => {
         handlers = handlers.filter((handler) => handler !== func);
       };
       return removeHandler;
     },
-    call(args: Arguments) {
-      handlers.forEach((func) => func(args));
+    call(location: string) {
+      console.log("handlers call");
+      handlers.forEach((func) => func(location));
     },
   };
 }

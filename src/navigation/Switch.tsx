@@ -9,6 +9,8 @@ interface Props {
 export default function Switch({ children }: Props) {
   const { location } = useRouterContext();
 
+  console.log("location", location);
+
   const childrenType = toString.call(children);
   const routes = childrenType === "[object Array]" ? children : [children];
   const targetElement = (routes as React.ReactElement[]).find(
