@@ -1,20 +1,20 @@
 import React from "react";
-import { Route, Router, Switch } from "./navigation";
+import { Route, BrowserRouter, Switch, useHistory } from "./navigation";
 import * as Pages from "./pages";
 
 function App() {
   return (
     <>
-      <Link href="/" />
-      <Link href="/feed" />
-      <Link href="/about" />
-      <Router>
+      <BrowserRouter>
+        <Link href="/" />
+        <Link href="/feed" />
+        <Link href="/about" />
         <Switch>
           <Route path="/" component={Pages.Home} />
           <Route path="/feed" component={Pages.Feed} />
           <Route path="/about" component={Pages.About} />
         </Switch>
-      </Router>
+      </BrowserRouter>
     </>
   );
 }
@@ -22,5 +22,6 @@ function App() {
 export default App;
 
 function Link({ href }: { href: string }) {
-  return <button onClick={() => (window.location.href = href)}>{href}</button>;
+  const { history } = useHistory();
+  return <button onClick={() => history.push(href)}>{href}</button>;
 }

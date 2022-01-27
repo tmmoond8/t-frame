@@ -1,5 +1,6 @@
 import React from "react";
-
+import { createHistory } from "./history";
+import { HistoryContextProvider } from "./history.Context";
 interface RouterContextObject {
   location: string;
 }
@@ -13,13 +14,16 @@ export const useRouterContext = () => React.useContext(RouterContext);
 
 interface Props {
   children: React.ReactNode;
+  history: ReturnType<typeof createHistory>;
 }
 
-export default function Router({ children }: Props) {
+export default function Router({ history, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
   return (
     <RouterContext.Provider value={{ location }}>
-      {children}
+      <HistoryContextProvider history={history}>
+        {children}
+      </HistoryContextProvider>
     </RouterContext.Provider>
   );
 }
