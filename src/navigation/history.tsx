@@ -2,8 +2,9 @@ import React from "react";
 
 type Handler = (location: string) => void;
 
-export const createHistory = () => {
+export const createHistory = (initPath: string) => {
   const listenres = createEvents();
+  const stack: string[] = [initPath];
   const history = {
     listen(listener: Handler) {
       console.log("history listen");
@@ -14,7 +15,14 @@ export const createHistory = () => {
       console.log("history push", path);
       console.log("window.history", window.history);
       window.history.pushState({ path }, "", path);
+      stack.push(path);
+      console.log("stack", stack);
       listenres.call(path);
+    },
+    pop() {
+      console.log("history pop");
+      stack.pop();
+      console.log("stack", stack);
     },
   };
 
@@ -34,7 +42,7 @@ function createEvents() {
       return removeHandler;
     },
     call(location: string) {
-      console.log("handlers call");
+      console.log("handlers call", handlers.length);
       handlers.forEach((func) => func(location));
     },
   };

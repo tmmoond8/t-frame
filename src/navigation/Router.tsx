@@ -32,8 +32,9 @@ export default function Router({ history, children }: Props) {
 
   React.useEffect(() => {
     window.addEventListener("popstate", () => {
-      const { path } = window.history.state;
-      console.log("popstate", window.history.state);
+      const path = window.history.state?.path ?? "/";
+      console.log("popstate", window.history);
+      history.pop();
       setLocation(path);
     });
   }, []);

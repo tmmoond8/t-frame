@@ -7,6 +7,6 @@ interface Props {
 }
 
 export default function BrowserRouter({ children }: Props) {
-  const history = createHistory();
+  const history = createHistory(window.location.pathname);
   return <Router history={history}>{children}</Router>;
 }
