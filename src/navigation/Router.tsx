@@ -19,16 +19,20 @@ interface Props {
 
 export default function Router({ history, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
+  const { push, pop, all } = useStack();
 
   React.useEffect(() => {
     console.log("useEffect listen");
     const unlisten = history.listen((location) => {
       console.log("setLocation", location);
       setLocation(location);
+      push(location);
     });
 
     return () => unlisten();
   });
+
+  console.log("all", all());
 
   React.useEffect(() => {
     window.addEventListener("popstate", () => {
@@ -36,6 +40,7 @@ export default function Router({ history, children }: Props) {
       console.log("popstate", window.history);
       history.pop();
       setLocation(path);
+      pop();
     });
   }, []);
 
@@ -46,4 +51,15 @@ export default function Router({ history, children }: Props) {
       </HistoryContextProvider>
     </RouterContext.Provider>
   );
+}
+
+function useStack() {
+  const stack = React.useRef<string[]>([]);
+
+  return {
+    current: () => stack.current[stack.current.length - 1],
+    all: () => stack.current,
+    pop: () => stack.current.pop(),
+    push: (screenName: string) => stack.current.push(screenName),
+  };
 }
