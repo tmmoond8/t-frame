@@ -39,4 +39,5 @@ const FullSizeWrapper = styled.div`
 
 const Main = styled.main`
   flex: 1;
+  position: relative;
 `;

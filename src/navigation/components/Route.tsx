@@ -1,7 +1,5 @@
 import React from "react";
-import Stack from "../modules/Stack";
-
-import { useRouterContext } from "./Router";
+import styled from "@emotion/styled";
 
 interface Props {
   path: any;
@@ -9,12 +7,7 @@ interface Props {
 }
 
 export default function Route({ path, component }: Props) {
-  const { location } = useRouterContext();
   const Component = component;
 
-  return path.match(location) ? (
-    <Stack>
-      <Component />
-    </Stack>
-  ) : null;
+  return <Component />;
 }
