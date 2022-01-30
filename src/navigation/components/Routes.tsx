@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useRouterContext } from ".";
+import { useRouterContext } from "..";
 
 interface Props {
   children: React.ReactElement | React.ReactElement[];

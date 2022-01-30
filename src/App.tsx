@@ -4,15 +4,13 @@ import * as Pages from "./pages";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" component={Pages.Home} />
-          <Route path="/feed" component={Pages.Feed} />
-          <Route path="/about" component={Pages.About} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" component={Pages.Home} />
+        <Route path="/feed" component={Pages.Feed} />
+        <Route path="/about" component={Pages.About} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

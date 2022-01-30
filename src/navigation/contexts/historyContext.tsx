@@ -1,10 +1,29 @@
-import { createStack } from "./Stack";
+import React from "react";
+import { ScreenStack } from "../modules/Stack";
+
+const HistoryContext = React.createContext<{
+  history: ReturnType<typeof createHistory>;
+}>(null!);
+
+interface Props {
+  history: ReturnType<typeof createHistory>;
+  children: React.ReactNode;
+}
+
+export const HistoryContextProvider = ({ history, children }: Props) => {
+  return (
+    <HistoryContext.Provider value={{ history }}>
+      {children}
+    </HistoryContext.Provider>
+  );
+};
+
+export const useHistory = () => React.useContext(HistoryContext);
 
 type Handler = (location: string) => void;
 
-export const createHistory = (stack: ReturnType<typeof createStack>) => {
+export const createHistory = (stack: ScreenStack) => {
   const listenres = createEvents();
-  // const stack: string[] = [initPath];
   const history = {
     listen(listener: Handler) {
       console.info("history listen");
@@ -12,9 +31,8 @@ export const createHistory = (stack: ReturnType<typeof createStack>) => {
       return removeListener;
     },
     push(path: string) {
-      if (path === stack.current().screenName) {
-        debugger;
-        console.log(`now stack: ${path}`);
+      if (path === stack.current.screenName) {
+        console.info(`now stack: ${path}`);
         return;
       }
       console.info("history push", path);

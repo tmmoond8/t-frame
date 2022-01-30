@@ -1,8 +1,7 @@
 import React from "react";
-import { createHistory } from "./history";
-import { createStack } from "./Stack";
-import { HistoryContextProvider } from "./history.Context";
-import { useStack } from "./Stack.Context";
+import { createHistory } from "../contexts/historyContext";
+import { ScreenStack } from "../modules/Stack";
+import { HistoryContextProvider } from "../contexts/historyContext";
 interface RouterContextObject {
   location: string;
 }
@@ -17,7 +16,7 @@ export const useRouterContext = () => React.useContext(RouterContext);
 interface Props {
   children: React.ReactNode;
   history: ReturnType<typeof createHistory>;
-  stack: ReturnType<typeof createStack>;
+  stack: ScreenStack;
 }
 
 export default function Router({ history, stack, children }: Props) {
@@ -26,7 +25,7 @@ export default function Router({ history, stack, children }: Props) {
   React.useEffect(() => {
     console.log("useEffect listen");
     const unlisten = history.listen((location) => {
-      console.log("location", location, stack.current().screenName);
+      console.log("location", location, stack.current.screenName);
       setLocation(location);
     });
 

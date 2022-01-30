@@ -1,5 +1,5 @@
 import React from "react";
-import Stack from "./Stack";
+import Stack from "../modules/Stack";
 
 import { useRouterContext } from "./Router";
 

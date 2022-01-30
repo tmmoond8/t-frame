@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { useHistory } from "./history.Context";
-import { useStack } from "./Stack.Context";
+import { useHistory } from "../contexts/historyContext";
+import { useStack } from "../contexts/stackContext";
 
 export default function Header() {
   const { all } = useStack();
