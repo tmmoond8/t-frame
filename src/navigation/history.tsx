@@ -1,28 +1,31 @@
-import React from "react";
+import { createStack } from "./Stack";
 
 type Handler = (location: string) => void;
 
-export const createHistory = (initPath: string) => {
+export const createHistory = (stack: ReturnType<typeof createStack>) => {
   const listenres = createEvents();
-  const stack: string[] = [initPath];
+  // const stack: string[] = [initPath];
   const history = {
     listen(listener: Handler) {
-      console.log("history listen");
+      console.info("history listen");
       const removeListener = listenres.push(listener);
       return removeListener;
     },
     push(path: string) {
-      console.log("history push", path);
-      console.log("window.history", window.history);
+      if (path === stack.current().screenName) {
+        debugger;
+        console.log(`now stack: ${path}`);
+        return;
+      }
+      console.info("history push", path);
+      console.info("window.history", window.history);
       window.history.pushState({ path }, "", path);
       stack.push(path);
-      console.log("stack", stack);
       listenres.call(path);
     },
     pop() {
-      console.log("history pop");
+      console.info("history pop");
       stack.pop();
-      console.log("stack", stack);
     },
   };
 
@@ -34,7 +37,7 @@ function createEvents() {
 
   return {
     push(func: Handler) {
-      console.log("handlers push", handlers.length + 1);
+      console.info("handlers push", handlers.length + 1);
       handlers.push(func);
       const removeHandler = () => {
         handlers = handlers.filter((handler) => handler !== func);
@@ -42,22 +45,8 @@ function createEvents() {
       return removeHandler;
     },
     call(location: string) {
-      console.log("handlers call", handlers.length);
+      console.info("handlers call", handlers.length);
       handlers.forEach((func) => func(location));
     },
   };
 }
-
-const HistoryContext = React.createContext<{
-  history: ReturnType<typeof createHistory>;
-}>(null!);
-
-interface Props {
-  history: ReturnType<typeof createHistory>;
-}
-
-export const HistoryContextProvider = ({ history }: Props) => {
-  return (
-    <HistoryContext.Provider value={{ history }}></HistoryContext.Provider>
-  );
-};

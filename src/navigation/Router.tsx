@@ -1,6 +1,8 @@
 import React from "react";
 import { createHistory } from "./history";
+import { createStack } from "./Stack";
 import { HistoryContextProvider } from "./history.Context";
+import { useStack } from "./Stack.Context";
 interface RouterContextObject {
   location: string;
 }
@@ -15,24 +17,23 @@ export const useRouterContext = () => React.useContext(RouterContext);
 interface Props {
   children: React.ReactNode;
   history: ReturnType<typeof createHistory>;
+  stack: ReturnType<typeof createStack>;
 }
 
-export default function Router({ history, children }: Props) {
+export default function Router({ history, stack, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
-  const { push, pop, all } = useStack();
 
   React.useEffect(() => {
     console.log("useEffect listen");
     const unlisten = history.listen((location) => {
-      console.log("setLocation", location);
+      console.log("location", location, stack.current().screenName);
       setLocation(location);
-      push(location);
     });
 
     return () => unlisten();
   });
 
-  console.log("all", all());
+  console.log("all", stack.all);
 
   React.useEffect(() => {
     window.addEventListener("popstate", () => {
@@ -40,26 +41,19 @@ export default function Router({ history, children }: Props) {
       console.log("popstate", window.history);
       history.pop();
       setLocation(path);
-      pop();
+      stack.pop();
     });
   }, []);
 
   return (
-    <RouterContext.Provider value={{ location }}>
+    <RouterContext.Provider
+      value={{
+        location,
+      }}
+    >
       <HistoryContextProvider history={history}>
         {children}
       </HistoryContextProvider>
     </RouterContext.Provider>
   );
-}
-
-function useStack() {
-  const stack = React.useRef<string[]>([]);
-
-  return {
-    current: () => stack.current[stack.current.length - 1],
-    all: () => stack.current,
-    pop: () => stack.current.pop(),
-    push: (screenName: string) => stack.current.push(screenName),
-  };
 }

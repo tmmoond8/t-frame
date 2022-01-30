@@ -1,4 +1,5 @@
 import React from "react";
+import Stack from "./Stack";
 
 import { useRouterContext } from "./Router";
 
@@ -11,5 +12,9 @@ export default function Route({ path, component }: Props) {
   const { location } = useRouterContext();
   const Component = component;
 
-  return path.match(location) ? <Component /> : null;
+  return path.match(location) ? (
+    <Stack>
+      <Component />
+    </Stack>
+  ) : null;
 }

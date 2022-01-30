@@ -1,12 +1,12 @@
 import React from "react";
 
-import { useRouterContext } from "../navigation";
+import { useRouterContext } from ".";
 
 interface Props {
   children: React.ReactElement | React.ReactElement[];
 }
 
-export default function Switch({ children }: Props) {
+export default function Routes({ children }: Props) {
   const { location } = useRouterContext();
 
   console.log("location", location);
