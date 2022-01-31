@@ -32,7 +32,7 @@ export default React.memo(function Stack({
   key,
 }: Props) {
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
-  console.log("isFocusing", key, isFocusing);
+  // console.log("isFocusing", key, isFocusing);
 
   React.useEffect(() => {
     setAnimation(slideIn);

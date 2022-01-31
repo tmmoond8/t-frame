@@ -3,14 +3,21 @@ import { useHistory } from "../contexts/historyContext";
 import { useStack } from "../contexts/stackContext";
 
 export default function Header() {
-  const { all } = useStack();
+  const stack = useStack();
 
   return (
     <StyledHeader>
       <Link href="/" />
       <Link href="/feed" />
       <Link href="/about" />
-      <button onClick={() => console.info(all)}>stack</button>
+      <button
+        onClick={() => {
+          console.info(stack.all.map(({ screenName }) => screenName));
+          console.info(stack.current, stack.prev);
+        }}
+      >
+        show stack
+      </button>
     </StyledHeader>
   );
 }

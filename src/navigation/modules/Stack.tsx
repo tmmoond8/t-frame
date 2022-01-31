@@ -32,6 +32,7 @@ export class ScreenStack {
   }
 
   push(screenName: string) {
+    console.info("stack: push", screenName);
     return this.stack.push({
       id: this.size,
       screenName,
@@ -39,6 +40,7 @@ export class ScreenStack {
   }
 
   pop() {
+    console.info("stack: pop");
     return this.stack.pop() ?? null;
   }
 

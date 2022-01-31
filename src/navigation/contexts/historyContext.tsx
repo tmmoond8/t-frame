@@ -44,6 +44,7 @@ export const createHistory = (stack: ScreenStack) => {
     pop() {
       console.info("history pop");
       stack.pop();
+      listenres.call(stack.current.screenName);
     },
   };
 

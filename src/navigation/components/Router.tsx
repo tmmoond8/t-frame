@@ -25,7 +25,7 @@ export default function Router({ history, stack, children }: Props) {
   React.useEffect(() => {
     console.log("useEffect listen");
     const unlisten = history.listen((location) => {
-      console.log("location", location, stack.current.screenName);
+      // console.log("location", location, stack.current.screenName);
       setLocation(location);
     });
 
@@ -40,7 +40,6 @@ export default function Router({ history, stack, children }: Props) {
       console.log("popstate", window.history);
       history.pop();
       setLocation(path);
-      stack.pop();
     });
   }, []);
 
