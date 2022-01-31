@@ -1,6 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
-import { animated, useSpring } from "@react-spring/web";
 import { useRouterContext } from "..";
 import { useStack } from "../contexts/stackContext";
 import Stack from "./Stack";
@@ -17,7 +15,7 @@ export default function Routes({ children }: Props) {
   console.log("current", stack.current);
   console.log("prev", stack.prev);
 
-  console.log("---", stack);
+  console.log("---", stack.trashs);
 
   const childrenType = toString.call(children);
   const routes =
@@ -25,16 +23,22 @@ export default function Routes({ children }: Props) {
 
   return (
     <React.Fragment>
-      {stack.all.map(({ id, screenName }) => {
+      {stack.all.concat(stack.trashs).map(({ id, level, screenName }) => {
         const targetElement = (routes as React.ReactElement[]).find(
           (route) => route.props.path === screenName
         );
         const Page = targetElement!.props.component;
 
-        const isFocusing = id === stack.current.id;
+        const isFocusing = level === stack.current.level;
 
         return (
-          <Stack key={id} isFocusing={isFocusing}>
+          <Stack
+            key={id}
+            level={level}
+            isFocusing={isFocusing}
+            screenName={screenName}
+            isPopped={stack.trashs.some((trash) => trash.id === id)}
+          >
             <Page />
           </Stack>
         );

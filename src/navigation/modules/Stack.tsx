@@ -1,15 +1,20 @@
 interface StackItem {
-  id: number;
+  id: string;
+  level: number;
   screenName: string;
 }
 
+const genID = () => (Math.random() * 123).toString(32).split(".")[1];
+
 export class ScreenStack {
   private stack: StackItem[] = [];
+  private _trashs: StackItem[] = [];
 
   constructor() {
     this.stack = [
       {
-        id: 0,
+        id: genID(),
+        level: 0,
         screenName: window.location.pathname,
       },
     ];
@@ -17,6 +22,10 @@ export class ScreenStack {
 
   get all() {
     return this.stack;
+  }
+
+  get trashs() {
+    return this._trashs;
   }
 
   get prev() {
@@ -34,14 +43,17 @@ export class ScreenStack {
   push(screenName: string) {
     console.info("stack: push", screenName);
     return this.stack.push({
-      id: this.size,
+      id: genID(),
+      level: this.size,
       screenName,
     });
   }
 
   pop() {
     console.info("stack: pop");
-    return this.stack.pop() ?? null;
+    const popped = this.stack.pop();
+    this.trashs.push(popped!);
+    return popped ?? null;
   }
 
   get screens() {

@@ -5,7 +5,9 @@ import { animated, useSpring } from "@react-spring/web";
 interface Props {
   children: React.ReactNode;
   isFocusing?: boolean;
-  key: number;
+  screenName: string;
+  isPopped: boolean;
+  level: number;
 }
 
 const slideIn = {
@@ -13,10 +15,27 @@ const slideIn = {
     transform: "translateX(100%)",
   },
   to: {
-    transform: "translateX(0)",
+    transform: "translateX(0%)",
   },
 };
 
+const slideOut = {
+  from: {
+    transform: "translateX(0%)",
+  },
+  to: {
+    transform: "translateX(100%)",
+  },
+};
+
+const fadeIn = {
+  from: {
+    filter: "brightness(0.7)",
+  },
+  to: {
+    filter: "brightness(1)",
+  },
+};
 const fadeOut = {
   from: {
     filter: "brightness(1)",
@@ -29,10 +48,12 @@ const fadeOut = {
 export default React.memo(function Stack({
   children,
   isFocusing = true,
-  key,
+  isPopped,
+  screenName,
+  level,
 }: Props) {
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
-  // console.log("isFocusing", key, isFocusing);
+  const focusShadowValue = React.useRef(true);
 
   React.useEffect(() => {
     setAnimation(slideIn);
@@ -42,14 +63,32 @@ export default React.memo(function Stack({
     if (!isFocusing) {
       setAnimation(fadeOut);
     }
+    if (focusShadowValue.current === false && isFocusing) {
+      setAnimation(fadeIn);
+    }
+    focusShadowValue.current = isFocusing;
   }, [isFocusing]);
+
+  React.useEffect(() => {
+    if (isPopped) {
+      console.log("isPopped", screenName);
+      setAnimation(slideOut);
+    }
+  }, [isPopped]);
 
   const animationStyle = useSpring(animation);
 
-  return <Animated style={animationStyle}>{children}</Animated>;
+  return (
+    <Animated style={animationStyle} level={level}>
+      {children}
+      <PageInfo>
+        {level}: {screenName}
+      </PageInfo>
+    </Animated>
+  );
 });
 
-const Animated = styled(animated.div)`
+const Animated = styled(animated.div)<{ level: number }>`
   position: absolute;
   left: 0;
   top: 0;
@@ -57,4 +96,15 @@ const Animated = styled(animated.div)`
   height: 100%;
   transform: translateX(100%);
   background-color: white;
+  z-index: ${(p) => p.level};
+`;
+
+const PageInfo = styled.span`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  opacity: 0.6;
+  padding: 4px;
+  background: #444;
+  color: white;
 `;
