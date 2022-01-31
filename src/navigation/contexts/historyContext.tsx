@@ -30,14 +30,16 @@ export const createHistory = (stack: ScreenStack) => {
       const removeListener = listenres.push(listener);
       return removeListener;
     },
-    push(path: string) {
+    push(path: string, useHistory = true) {
       if (path === stack.current.screenName) {
         console.info(`now stack: ${path}`);
         return;
       }
       console.info("history push", path);
       console.info("window.history", window.history);
-      window.history.pushState({ path }, "", path);
+      if (useHistory) {
+        window.history.pushState({ path }, "", path);
+      }
       stack.push(path);
       listenres.call(path);
     },

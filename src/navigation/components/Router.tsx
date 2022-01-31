@@ -35,10 +35,14 @@ export default function Router({ history, stack, children }: Props) {
   console.log("all", stack.all);
 
   React.useEffect(() => {
-    window.addEventListener("popstate", () => {
+    window.addEventListener("popstate", (a) => {
       const path = window.history.state?.path ?? "/";
-      console.log("popstate", window.history);
-      history.pop();
+      console.log("popstate", path, a, window.history);
+      if (stack.prev?.screenName === path) {
+        history.pop();
+      } else {
+        history.push(path, false);
+      }
       setLocation(path);
     });
   }, []);

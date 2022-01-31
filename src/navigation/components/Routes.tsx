@@ -28,7 +28,6 @@ export default function Routes({ children }: Props) {
           (route) => route.props.path === screenName
         );
         const Page = targetElement!.props.component;
-
         const isFocusing = level === stack.current.level;
 
         return (

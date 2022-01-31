@@ -8,7 +8,7 @@ const genID = () => (Math.random() * 123).toString(32).split(".")[1];
 
 export class ScreenStack {
   private stack: StackItem[] = [];
-  private _trashs: StackItem[] = [];
+  private _trashs: Record<number, StackItem> = {};
 
   constructor() {
     this.stack = [
@@ -25,7 +25,7 @@ export class ScreenStack {
   }
 
   get trashs() {
-    return this._trashs;
+    return Object.values(this._trashs);
   }
 
   get prev() {
@@ -52,7 +52,7 @@ export class ScreenStack {
   pop() {
     console.info("stack: pop");
     const popped = this.stack.pop();
-    this.trashs.push(popped!);
+    this._trashs[this.size] = popped!;
     return popped ?? null;
   }
 
