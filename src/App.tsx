@@ -6,9 +6,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" component={Pages.Home} />
-        <Route path="/feed" component={Pages.Feed} />
-        <Route path="/about" component={Pages.About} />
+        <Route path="/" title="Home" component={Pages.Home} />
+        <Route path="/feed" title="Feed" component={Pages.Feed} />
+        <Route path="/about" title="About" component={Pages.About} />
       </Routes>
     </BrowserRouter>
   );

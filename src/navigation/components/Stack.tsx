@@ -5,7 +5,7 @@ import { animated, useSpring } from "@react-spring/web";
 interface Props {
   children: React.ReactNode;
   isFocusing?: boolean;
-  screenName: string;
+  path: string;
   isPopped: boolean;
   level: number;
 }
@@ -49,7 +49,7 @@ export default React.memo(function Stack({
   children,
   isFocusing = true,
   isPopped,
-  screenName,
+  path,
   level,
 }: Props) {
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
@@ -71,7 +71,7 @@ export default React.memo(function Stack({
 
   React.useEffect(() => {
     if (isPopped) {
-      console.log("isPopped", screenName);
+      console.log("isPopped", path);
       setAnimation(slideOut);
     }
   }, [isPopped]);
@@ -82,7 +82,7 @@ export default React.memo(function Stack({
     <Animated style={animationStyle} level={level}>
       {children}
       <PageInfo>
-        {level}: {screenName}
+        {level}: {path}
       </PageInfo>
     </Animated>
   );

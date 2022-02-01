@@ -1,7 +1,7 @@
 interface StackItem {
   id: string;
   level: number;
-  screenName: string;
+  path: string;
 }
 
 const genID = () => (Math.random() * 123).toString(32).split(".")[1];
@@ -15,7 +15,7 @@ export class ScreenStack {
       {
         id: genID(),
         level: 0,
-        screenName: window.location.pathname,
+        path: window.location.pathname,
       },
     ];
   }
@@ -40,12 +40,12 @@ export class ScreenStack {
     return this.stack.length;
   }
 
-  push(screenName: string) {
-    console.info("stack: push", screenName);
+  push(path: string) {
+    console.info("stack: push", path);
     return this.stack.push({
       id: genID(),
       level: this.size,
-      screenName,
+      path,
     });
   }
 
@@ -57,6 +57,6 @@ export class ScreenStack {
   }
 
   get screens() {
-    return this.stack.map(({ screenName }) => screenName);
+    return this.stack.map(({ path }) => path);
   }
 }

@@ -23,9 +23,9 @@ export default function Routes({ children }: Props) {
 
   return (
     <React.Fragment>
-      {stack.all.concat(stack.trashs).map(({ id, level, screenName }) => {
+      {stack.all.concat(stack.trashs).map(({ id, level, path }) => {
         const targetElement = (routes as React.ReactElement[]).find(
-          (route) => route.props.path === screenName
+          (route) => route.props.path === path
         );
         const Page = targetElement!.props.component;
         const isFocusing = level === stack.current.level;
@@ -35,7 +35,7 @@ export default function Routes({ children }: Props) {
             key={id}
             level={level}
             isFocusing={isFocusing}
-            screenName={screenName}
+            path={path}
             isPopped={stack.trashs.some((trash) => trash.id === id)}
           >
             <Page />

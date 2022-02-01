@@ -31,7 +31,7 @@ export const createHistory = (stack: ScreenStack) => {
       return removeListener;
     },
     push(path: string, useHistory = true) {
-      if (path === stack.current.screenName) {
+      if (path === stack.current.path) {
         console.info(`now stack: ${path}`);
         return;
       }
@@ -43,10 +43,14 @@ export const createHistory = (stack: ScreenStack) => {
       stack.push(path);
       listenres.call(path);
     },
-    pop() {
+    pop(useHistory = true) {
       console.info("history pop");
+      if (useHistory) {
+        window.history.back();
+        return;
+      }
       stack.pop();
-      listenres.call(stack.current.screenName);
+      listenres.call(stack.current.path);
     },
   };
 

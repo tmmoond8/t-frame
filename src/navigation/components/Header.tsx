@@ -2,17 +2,21 @@ import styled from "@emotion/styled";
 import { useHistory } from "../contexts/historyContext";
 import { useStack } from "../contexts/stackContext";
 
-export default function Header() {
+interface Props {
+  title: string;
+}
+
+export default function Header({ title }: Props) {
   const stack = useStack();
+  console.log("stack size", stack.size);
 
   return (
     <StyledHeader>
-      <Link href="/" />
-      <Link href="/feed" />
-      <Link href="/about" />
+      <Link />
+      <Title>{title}</Title>
       <button
         onClick={() => {
-          console.info(stack.all.map(({ screenName }) => screenName));
+          console.info(stack.all.map(({ path }) => path));
           console.info(stack.current, stack.prev);
         }}
       >
@@ -23,11 +27,20 @@ export default function Header() {
 }
 
 const StyledHeader = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 56px;
   width: 100%;
+  background-color: white;
 `;
 
-function Link({ href }: { href: string }) {
+const Title = styled.h1`
+  color: black;
+  font-size: 16px;
+`;
+
+function Link() {
   const { history } = useHistory();
-  return <button onClick={() => history.push(href)}>{href}</button>;
+  return <button onClick={() => history.pop()}>←</button>;
 }

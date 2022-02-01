@@ -25,12 +25,14 @@ export default function Router({ history, stack, children }: Props) {
   React.useEffect(() => {
     console.log("useEffect listen");
     const unlisten = history.listen((location) => {
-      // console.log("location", location, stack.current.screenName);
+      // console.log("location", location, stack.current.path);
       setLocation(location);
     });
 
     return () => unlisten();
   });
+
+  console.log("ddd location", location);
 
   console.log("all", stack.all);
 
@@ -38,8 +40,8 @@ export default function Router({ history, stack, children }: Props) {
     window.addEventListener("popstate", (a) => {
       const path = window.history.state?.path ?? "/";
       console.log("popstate", path, a, window.history);
-      if (stack.prev?.screenName === path) {
-        history.pop();
+      if (stack.prev?.path === path) {
+        history.pop(false);
       } else {
         history.push(path, false);
       }
