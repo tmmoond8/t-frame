@@ -15,3 +15,11 @@ export const StackContextProvider = ({ stack, children }: Props) => {
 };
 
 export const useStack = () => React.useContext(StackContext);
+
+export function useFocusEffect(func: () => void) {
+  const stack = useStack();
+  React.useEffect(() => {
+    console.log("useFocusEffect");
+    func();
+  }, [stack.current]);
+}

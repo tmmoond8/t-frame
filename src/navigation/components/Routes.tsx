@@ -32,7 +32,7 @@ export default function Routes({ children }: Props) {
     setOption({
       title: targetElement!.props.title,
       useBackButton: stack.size > 1,
-      rightMenu: targetElement!.props.rightMenu,
+      rightMenus: targetElement!.props.rightMenus,
     });
   }, [stack.current.id]);
 
@@ -43,7 +43,7 @@ export default function Routes({ children }: Props) {
           (route) => route.props.path === path
         );
         const Page = targetElement!.props.component;
-        const isFocusing = level === stack.current.level;
+        const isFocusing = id === stack.current.id;
 
         return (
           <Stack

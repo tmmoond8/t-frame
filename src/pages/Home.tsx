@@ -1,9 +1,24 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { useHistory } from "../navigation";
+import { useFocusEffect, useHistory, useHeader } from "../navigation";
 
 export default function HomePage() {
   const { history } = useHistory();
+  const { setOption } = useHeader();
+
+  // 고치고 싶다.
+  // useFocusEffect(() => {
+  //   setOption({
+  //     title: "홈",
+  //     useBackButton: false,
+  //     rightMenus: (
+  //       <>
+  //         <button onClick={() => history.push("/editor")}>글 쓰기</button>
+  //       </>
+  //     ),
+  //   });
+  // });
+
   const { data } = useFetch();
   return (
     <List>

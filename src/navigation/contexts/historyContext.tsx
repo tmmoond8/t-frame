@@ -22,6 +22,11 @@ export const useHistory = () => React.useContext(HistoryContext);
 
 type Handler = (location: string) => void;
 
+interface PushOptions {
+  state?: Record<string, any>;
+  useHistory?: boolean;
+}
+
 export const createHistory = (stack: ScreenStack) => {
   const listenres = createEvents();
   const history = {
@@ -30,16 +35,7 @@ export const createHistory = (stack: ScreenStack) => {
       const removeListener = listenres.push(listener);
       return removeListener;
     },
-    push(
-      path: string,
-      {
-        state = {},
-        useHistory = true,
-      }: {
-        state?: Record<string, any>;
-        useHistory?: boolean;
-      }
-    ) {
+    push(path: string, { state = {}, useHistory = true }: PushOptions = {}) {
       if (path === stack.current.path) {
         console.info(`now stack: ${path}`);
         return;

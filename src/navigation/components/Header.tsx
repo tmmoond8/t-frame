@@ -21,6 +21,7 @@ export default function Header({ screenOptions }: Props) {
   } = screenOptions ?? {};
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
+  const [rightMenus, setRightMenus] = React.useState(null);
   const stack = useStack();
   const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
 
@@ -30,6 +31,7 @@ export default function Header({ screenOptions }: Props) {
     const eventHandler = (e: CustomEvent<any>) => {
       setTitle(e.detail.title ?? "");
       setShowBack(e.detail.useBackButton ?? false);
+      setRightMenus(e.detail.rightMenus);
     };
     (window as any).addEventListener(HEADER_EVENTS, eventHandler);
     return () => {
@@ -42,17 +44,16 @@ export default function Header({ screenOptions }: Props) {
       <HeaderSide>
         <Link show={showBack} />
       </HeaderSide>
-      <Title style={titleStyle}>{title}</Title>
-      <HeaderSide>
-        <button
-          onClick={() => {
-            console.info(stack.all.map(({ path }) => path));
-            console.info(stack.current, stack.prev);
-          }}
-        >
-          show stack
-        </button>
-      </HeaderSide>
+      <Title
+        style={titleStyle}
+        onClick={() => {
+          console.info(stack.all.map(({ path }) => path));
+          console.info(stack.current, stack.prev);
+        }}
+      >
+        {title}
+      </Title>
+      <HeaderSide>{rightMenus}</HeaderSide>
     </StyledHeader>
   );
 }
@@ -91,18 +92,18 @@ export function useHeader() {
   const setOption = ({
     title = "",
     useBackButton = false,
-    rightMenu,
+    rightMenus,
   }: {
     title?: string;
     useBackButton?: boolean;
-    rightMenu?: React.ReactNode;
+    rightMenus?: React.ReactNode;
   }) => {
     window.dispatchEvent(
       new CustomEvent(HEADER_EVENTS, {
         detail: {
           title,
           useBackButton,
-          rightMenu,
+          rightMenus,
         },
       })
     );

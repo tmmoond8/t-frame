@@ -4,10 +4,11 @@ interface Props {
   path: any;
   title: string;
   component: React.FC;
+  rightMenus?: React.FC;
 }
 
-export default function Route({ title, component }: Props) {
-  const Component = component;
+export default function Route(_: Props) {
+  // 실제로 그리는 것은 Routes
 
-  return <Component />;
+  return null;
 }

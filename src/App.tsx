@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, BrowserRouter, Routes } from "./navigation";
+import { Route, BrowserRouter, Routes, useHistory } from "./navigation";
 import * as Pages from "./pages";
 
 function App() {
@@ -16,12 +16,22 @@ function App() {
       }}
     >
       <Routes>
-        <Route path="/" title="Home" component={Pages.Home} />
+        <Route
+          path="/"
+          title="Home"
+          component={Pages.Home}
+          rightMenus={HomeRightMenus}
+        />
         <Route path="/detail" title="Detail" component={Pages.Detail} />
-        <Route path="/about" title="About" component={Pages.About} />
+        <Route path="/editor" title="Editor" component={Pages.Editor} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
+function HomeRightMenus() {
+  const { history } = useHistory();
+  return <button onClick={() => history.push("/editor")}>✏️</button>;
+}
