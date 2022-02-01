@@ -8,7 +8,7 @@ import Header from "./Header";
 
 interface Props {
   children: React.ReactNode;
-  screenOptions: {
+  screenOptions?: {
     headerStyle: React.CSSProperties;
     headerTintColor?: string;
     headerTitleStyle: React.CSSProperties;
@@ -22,7 +22,7 @@ export default function BrowserRouter({ children, screenOptions }: Props) {
     <StackContextProvider stack={stack}>
       <Router history={history} stack={stack}>
         <FullSizeWrapper>
-          <Header screenOptions={screenOptions} />
+          {screenOptions && <Header screenOptions={screenOptions} />}
           <Main>{children}</Main>
         </FullSizeWrapper>
       </Router>

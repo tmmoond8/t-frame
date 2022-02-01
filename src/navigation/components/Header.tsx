@@ -6,7 +6,7 @@ import { useStack } from "../contexts/stackContext";
 const HEADER_EVENTS = "T-FRAME-HEADER";
 
 interface Props {
-  screenOptions: {
+  screenOptions?: {
     headerStyle?: React.CSSProperties;
     headerTintColor?: string;
     headerTitleStyle?: React.CSSProperties;
@@ -18,7 +18,7 @@ export default function Header({ screenOptions }: Props) {
     headerStyle = {},
     headerTintColor,
     headerTitleStyle = {},
-  } = screenOptions;
+  } = screenOptions ?? {};
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
   const stack = useStack();
