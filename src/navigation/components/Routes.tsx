@@ -2,6 +2,7 @@ import React from "react";
 import { useRouterContext } from "..";
 import { useStack } from "../contexts/stackContext";
 import Stack from "./Stack";
+import { useHeader } from "./Header";
 
 interface Props {
   children: React.ReactElement | React.ReactElement[];
@@ -10,6 +11,7 @@ interface Props {
 export default function Routes({ children }: Props) {
   const { location } = useRouterContext();
   const stack = useStack();
+  const { setOption } = useHeader();
 
   console.log("location", location);
   console.log("current", stack.current);
@@ -20,6 +22,19 @@ export default function Routes({ children }: Props) {
   const childrenType = toString.call(children);
   const routes =
     childrenType === "[object Array]" ? (children as any[]) : [children];
+
+  React.useEffect(() => {
+    const current = stack.current;
+    const targetElement = (routes as React.ReactElement[]).find(
+      (route) => route.props.path === current.path
+    );
+
+    setOption({
+      title: targetElement!.props.title,
+      useBackButton: stack.size > 1,
+      rightMenu: targetElement!.props.rightMenu,
+    });
+  }, [stack.current.id]);
 
   return (
     <React.Fragment>

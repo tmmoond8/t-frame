@@ -17,7 +17,7 @@ export default function BrowserRouter({ children }: Props) {
     <StackContextProvider stack={stack}>
       <Router history={history} stack={stack}>
         <FullSizeWrapper>
-          <Header title={stack.current.path} />
+          <Header />
           <Main>{children}</Main>
         </FullSizeWrapper>
       </Router>
