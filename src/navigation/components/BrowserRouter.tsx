@@ -8,16 +8,21 @@ import Header from "./Header";
 
 interface Props {
   children: React.ReactNode;
+  screenOptions: {
+    headerStyle: React.CSSProperties;
+    headerTintColor?: string;
+    headerTitleStyle: React.CSSProperties;
+  };
 }
 
-export default function BrowserRouter({ children }: Props) {
+export default function BrowserRouter({ children, screenOptions }: Props) {
   const stack = new ScreenStack();
   const history = createHistory(stack);
   return (
     <StackContextProvider stack={stack}>
       <Router history={history} stack={stack}>
         <FullSizeWrapper>
-          <Header />
+          <Header screenOptions={screenOptions} />
           <Main>{children}</Main>
         </FullSizeWrapper>
       </Router>

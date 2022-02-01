@@ -5,10 +5,24 @@ import { useStack } from "../contexts/stackContext";
 
 const HEADER_EVENTS = "T-FRAME-HEADER";
 
-export default function Header() {
+interface Props {
+  screenOptions: {
+    headerStyle?: React.CSSProperties;
+    headerTintColor?: string;
+    headerTitleStyle?: React.CSSProperties;
+  };
+}
+
+export default function Header({ screenOptions }: Props) {
+  const {
+    headerStyle = {},
+    headerTintColor,
+    headerTitleStyle = {},
+  } = screenOptions;
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
   const stack = useStack();
+  const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
 
   console.log("header stack size", stack.size);
 
@@ -24,17 +38,21 @@ export default function Header() {
   }, []);
 
   return (
-    <StyledHeader>
-      <Link show={showBack} />
-      <Title>{title}</Title>
-      <button
-        onClick={() => {
-          console.info(stack.all.map(({ path }) => path));
-          console.info(stack.current, stack.prev);
-        }}
-      >
-        show stack
-      </button>
+    <StyledHeader style={headerStyle}>
+      <HeaderSide>
+        <Link show={showBack} />
+      </HeaderSide>
+      <Title style={titleStyle}>{title}</Title>
+      <HeaderSide>
+        <button
+          onClick={() => {
+            console.info(stack.all.map(({ path }) => path));
+            console.info(stack.current, stack.prev);
+          }}
+        >
+          show stack
+        </button>
+      </HeaderSide>
     </StyledHeader>
   );
 }
@@ -64,6 +82,10 @@ function Link({ show }: { show: boolean }) {
     </button>
   );
 }
+
+const HeaderSide = styled.div`
+  width: 100px;
+`;
 
 export function useHeader() {
   const setOption = ({

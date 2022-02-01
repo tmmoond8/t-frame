@@ -4,7 +4,17 @@ import * as Pages from "./pages";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#f4511e",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
       <Routes>
         <Route path="/" title="Home" component={Pages.Home} />
         <Route path="/feed" title="Feed" component={Pages.Feed} />
