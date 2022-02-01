@@ -30,7 +30,16 @@ export const createHistory = (stack: ScreenStack) => {
       const removeListener = listenres.push(listener);
       return removeListener;
     },
-    push(path: string, useHistory = true) {
+    push(
+      path: string,
+      {
+        state = {},
+        useHistory = true,
+      }: {
+        state?: Record<string, any>;
+        useHistory?: boolean;
+      }
+    ) {
       if (path === stack.current.path) {
         console.info(`now stack: ${path}`);
         return;
@@ -38,7 +47,7 @@ export const createHistory = (stack: ScreenStack) => {
       console.info("history push", path);
       console.info("window.history", window.history);
       if (useHistory) {
-        window.history.pushState({ path }, "", path);
+        window.history.pushState({ ...state, path }, "", path);
       }
       stack.push(path);
       listenres.call(path);

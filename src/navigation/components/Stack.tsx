@@ -10,6 +10,15 @@ interface Props {
   level: number;
 }
 
+const fixed = {
+  from: {
+    transform: "translateX(0%)",
+  },
+  to: {
+    transform: "translateX(0%)",
+  },
+};
+
 const slideIn = {
   from: {
     transform: "translateX(100%)",
@@ -56,7 +65,11 @@ export default React.memo(function Stack({
   const focusShadowValue = React.useRef(true);
 
   React.useEffect(() => {
-    setAnimation(slideIn);
+    if (level === 0) {
+      setAnimation(fixed);
+    } else {
+      setAnimation(slideIn);
+    }
   }, []);
 
   React.useEffect(() => {

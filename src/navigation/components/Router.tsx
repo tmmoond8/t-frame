@@ -43,7 +43,9 @@ export default function Router({ history, stack, children }: Props) {
       if (stack.prev?.path === path) {
         history.pop(false);
       } else {
-        history.push(path, false);
+        history.push(path, {
+          useHistory: false,
+        });
       }
       setLocation(path);
     });

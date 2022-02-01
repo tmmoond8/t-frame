@@ -17,7 +17,7 @@ function App() {
     >
       <Routes>
         <Route path="/" title="Home" component={Pages.Home} />
-        <Route path="/feed" title="Feed" component={Pages.Feed} />
+        <Route path="/detail" title="Detail" component={Pages.Detail} />
         <Route path="/about" title="About" component={Pages.About} />
       </Routes>
     </BrowserRouter>
