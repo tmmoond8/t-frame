@@ -40,7 +40,7 @@ export default function Routes({ children }: Props) {
     <React.Fragment>
       {stack.all.concat(stack.trashs).map(({ id, level, path }) => {
         const targetElement = (routes as React.ReactElement[]).find(
-          (route) => route.props.path === path
+          (route) => route?.props?.path === path
         );
         const Page = targetElement!.props.component;
         const isFocusing = id === stack.current.id;
