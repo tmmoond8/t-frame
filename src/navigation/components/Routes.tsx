@@ -38,25 +38,28 @@ export default function Routes({ children }: Props) {
 
   return (
     <React.Fragment>
-      {stack.all.concat(stack.trashs).map(({ id, level, path }) => {
-        const targetElement = (routes as React.ReactElement[]).find(
-          (route) => route?.props?.path === path
-        );
-        const Page = targetElement!.props.component;
-        const isFocusing = id === stack.current.id;
+      {stack.all
+        .concat(stack.trashs)
+        .map(({ id, level, path, skipAnimation }) => {
+          const targetElement = (routes as React.ReactElement[]).find(
+            (route) => route?.props?.path === path
+          );
+          const Page = targetElement!.props.component;
+          const isFocusing = id === stack.current.id;
 
-        return (
-          <Stack
-            key={id}
-            level={level}
-            isFocusing={isFocusing}
-            path={path}
-            isPopped={stack.trashs.some((trash) => trash.id === id)}
-          >
-            <Page />
-          </Stack>
-        );
-      })}
+          return (
+            <Stack
+              key={id}
+              level={level}
+              isFocusing={isFocusing}
+              path={path}
+              isPopped={stack.trashs.some((trash) => trash.id === id)}
+              skipAnimation={skipAnimation}
+            >
+              <Page />
+            </Stack>
+          );
+        })}
     </React.Fragment>
   );
 }

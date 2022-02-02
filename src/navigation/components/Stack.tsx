@@ -8,6 +8,7 @@ interface Props {
   path: string;
   isPopped: boolean;
   level: number;
+  skipAnimation?: boolean;
 }
 
 const fixed = {
@@ -37,20 +38,29 @@ const slideOut = {
   },
 };
 
-const fadeIn = {
+// const fadeIn = {
+//   from: {
+//     filter: "brightness(0.9)",
+//   },
+//   to: {
+//     filter: "brightness(1)",
+//   },
+// };
+// const fadeOut = {
+//   from: {
+//     filter: "brightness(1)",
+//   },
+//   to: {
+//     filter: "brightness(0.9)",
+//   },
+// };
+
+const flashOut = {
   from: {
-    filter: "brightness(0.7)",
+    transform: "translateX(10000%)",
   },
   to: {
-    filter: "brightness(1)",
-  },
-};
-const fadeOut = {
-  from: {
-    filter: "brightness(1)",
-  },
-  to: {
-    filter: "brightness(0.7)",
+    transform: "translateX(100000%)",
   },
 };
 
@@ -60,6 +70,7 @@ export default React.memo(function Stack({
   isPopped,
   path,
   level,
+  skipAnimation = false,
 }: Props) {
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
   const focusShadowValue = React.useRef(true);
@@ -74,20 +85,23 @@ export default React.memo(function Stack({
 
   React.useEffect(() => {
     if (!isFocusing) {
-      setAnimation(fadeOut);
+      // setAnimation(fadeOut);
     }
+
     if (focusShadowValue.current === false && isFocusing) {
-      setAnimation(fadeIn);
+      // setAnimation(fadeIn);
     }
     focusShadowValue.current = isFocusing;
-  }, [isFocusing]);
+  }, [isFocusing, skipAnimation]);
 
   React.useEffect(() => {
-    if (isPopped) {
+    if (isPopped && skipAnimation) {
+      setAnimation(flashOut);
+    } else if (isPopped) {
       console.log("isPopped", path);
       setAnimation(slideOut);
     }
-  }, [isPopped]);
+  }, [isPopped, skipAnimation]);
 
   const animationStyle = useSpring(animation);
 

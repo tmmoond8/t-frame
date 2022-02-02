@@ -2,6 +2,7 @@ interface StackItem {
   id: string;
   level: number;
   path: string;
+  skipAnimation?: boolean;
 }
 
 const genID = () => (Math.random() * 123).toString(32).split(".")[1];
@@ -16,6 +17,7 @@ export class ScreenStack {
         id: genID(),
         level: 0,
         path: window.location.pathname,
+        skipAnimation: false,
       },
     ];
   }
@@ -49,10 +51,13 @@ export class ScreenStack {
     });
   }
 
-  pop() {
+  pop(options?: Partial<StackItem>) {
     console.info("stack: pop");
     const popped = this.stack.pop();
-    this._trashs[this.size] = popped!;
+    this._trashs[this.size] = {
+      ...popped!,
+      ...options,
+    };
     return popped ?? null;
   }
 
