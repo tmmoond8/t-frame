@@ -21,7 +21,7 @@ export default function Header({ screenOptions }: Props) {
   } = screenOptions ?? {};
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
-  const [rightMenus, setRightMenus] = React.useState(null);
+  const rightMenu = React.useRef<React.FC>();
   const stack = useStack();
   const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
 
@@ -31,13 +31,15 @@ export default function Header({ screenOptions }: Props) {
     const eventHandler = (e: CustomEvent<any>) => {
       setTitle(e.detail.title ?? "");
       setShowBack(e.detail.useBackButton ?? false);
-      setRightMenus(e.detail.rightMenus);
+      rightMenu.current = e.detail.rightMenus as React.FC | undefined;
     };
     (window as any).addEventListener(HEADER_EVENTS, eventHandler);
     return () => {
       (window as any).removeEventListener(HEADER_EVENTS, eventHandler);
     };
   }, []);
+
+  const RightMenus: React.FC | null = rightMenu.current || null;
 
   return (
     <StyledHeader style={headerStyle}>
@@ -53,7 +55,7 @@ export default function Header({ screenOptions }: Props) {
       >
         {title}
       </Title>
-      <HeaderSide>{rightMenus}</HeaderSide>
+      <HeaderSide>{RightMenus && <RightMenus />}</HeaderSide>
     </StyledHeader>
   );
 }
