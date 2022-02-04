@@ -27,17 +27,7 @@ interface Point {
 export default function Router({ history, stack, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
   const [log, setLog] = React.useState({});
-  const touchs = React.useRef<{
-    start: Point;
-    end: Point;
-    gestureBack: boolean;
-    deltaX: number;
-  }>({
-    start: { x: 0, y: 0 },
-    end: { x: 0, y: 0 },
-    gestureBack: false,
-    deltaX: 0,
-  });
+  const { touchs } = useGesture();
 
   React.useEffect(() => {
     console.log("useEffect listen");
@@ -54,8 +44,7 @@ export default function Router({ history, stack, children }: Props) {
   console.log("all", stack.all);
 
   React.useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    window.addEventListener("popstate", (a) => {
+    const popStateEvent = (e: PopStateEvent) => {
       const path = window.history.state?.path ?? "/";
 
       if (touchs.current.gestureBack) {
@@ -64,7 +53,7 @@ export default function Router({ history, stack, children }: Props) {
         return;
       }
 
-      console.log("popstate", path, a, window.history);
+      console.log("popstate", path, e, window.history);
       if (stack.prev?.path === path) {
         history.pop({
           useHistory: false,
@@ -76,54 +65,10 @@ export default function Router({ history, stack, children }: Props) {
       }
 
       setLocation(path);
-    });
-
-    window.addEventListener("touchstart", function (e: TouchEvent) {
-      const { changedTouches } = e;
-      touchs.current.start = {
-        x: changedTouches[0].clientX,
-        y: changedTouches[0].clientY,
-      };
-    });
-
-    window.addEventListener("touchend", function (e: TouchEvent) {
-      const { changedTouches } = e;
-      touchs.current.end = {
-        x: changedTouches[0].clientX,
-        y: changedTouches[0].clientY,
-      };
-      if (
-        Math.floor(touchs.current.start.x) < 20 &&
-        Math.floor(touchs.current.end.x) < 0
-      ) {
-        touchs.current.gestureBack = true;
-        timer = setTimeout(() => {
-          touchs.current.gestureBack = false;
-        }, 1000);
-      }
-    });
-
-    window.addEventListener("oncompositionstart", function () {
-      console.log("oncompositionstart");
-    });
-
-    window.addEventListener("ondragstart", function () {
-      console.log("ondragstart");
-    });
-
-    window.addEventListener("mousewheel", (e) => {
-      const deltaX = (e as WheelEvent).deltaX;
-      if (deltaX < 0) {
-        touchs.current.gestureBack = true;
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          touchs.current.gestureBack = false;
-        }, 1000);
-      }
-    });
-
+    };
+    window.addEventListener("popstate", popStateEvent);
     return () => {
-      clearTimeout(timer);
+      window.removeEventListener("popstate", popStateEvent);
     };
   }, []);
 
@@ -164,4 +109,81 @@ export default function Router({ history, stack, children }: Props) {
       </HistoryContextProvider>
     </RouterContext.Provider>
   );
+}
+
+function useGesture() {
+  const timer = React.useRef<{
+    gestureBack: ReturnType<typeof setTimeout>;
+  }>({
+    gestureBack: setTimeout(() => {}),
+  });
+  const touchs = React.useRef<{
+    start: Point;
+    end: Point;
+    gestureBack: boolean;
+    deltaX: number;
+  }>({
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 0 },
+    gestureBack: false,
+    deltaX: 0,
+  });
+
+  React.useEffect(() => {
+    const touchStartEvent = (e: TouchEvent) => {
+      const { changedTouches } = e;
+      touchs.current.start = {
+        x: changedTouches[0].clientX,
+        y: changedTouches[0].clientY,
+      };
+    };
+
+    const touchEndEvent = (e: TouchEvent) => {
+      const { changedTouches } = e;
+      touchs.current.end = {
+        x: changedTouches[0].clientX,
+        y: changedTouches[0].clientY,
+      };
+      if (
+        Math.floor(touchs.current.start.x) < 20 &&
+        Math.floor(touchs.current.end.x) < 0
+      ) {
+        touchs.current.gestureBack = true;
+        timer.current.gestureBack = setTimeout(() => {
+          touchs.current.gestureBack = false;
+        }, 1000);
+      }
+    };
+
+    window.addEventListener("touchstart", touchStartEvent);
+    window.addEventListener("touchend", touchEndEvent);
+
+    return () => {
+      window.removeEventListener("touchstart", touchStartEvent);
+      window.removeEventListener("touchend", touchEndEvent);
+      clearTimeout(timer.current.gestureBack);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const mouseWheelEvent = (e: Event) => {
+      const deltaX = (e as WheelEvent).deltaX;
+      if (deltaX < 0) {
+        touchs.current.gestureBack = true;
+        clearTimeout(timer.current.gestureBack);
+        timer.current.gestureBack = setTimeout(() => {
+          touchs.current.gestureBack = false;
+        }, 1000);
+      }
+    };
+    window.addEventListener("mousewheel", mouseWheelEvent);
+
+    return () => {
+      clearTimeout(timer.current.gestureBack);
+    };
+  }, []);
+
+  return {
+    touchs,
+  };
 }
