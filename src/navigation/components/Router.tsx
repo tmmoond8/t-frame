@@ -31,12 +31,10 @@ export default function Router({ history, stack, children }: Props) {
     start: Point;
     end: Point;
     gestureBack: boolean;
-    deltaX: number;
   }>({
     start: { x: 0, y: 0 },
     end: { x: 0, y: 0 },
     gestureBack: false,
-    deltaX: 0,
   });
 
   React.useEffect(() => {
@@ -77,7 +75,6 @@ export default function Router({ history, stack, children }: Props) {
 
       setLocation(path);
     });
-
     window.addEventListener("touchstart", function (e: TouchEvent) {
       const { changedTouches } = e;
       touchs.current.start = {
@@ -85,7 +82,6 @@ export default function Router({ history, stack, children }: Props) {
         y: changedTouches[0].clientY,
       };
     });
-
     window.addEventListener("touchend", function (e: TouchEvent) {
       const { changedTouches } = e;
       touchs.current.end = {
@@ -97,25 +93,6 @@ export default function Router({ history, stack, children }: Props) {
         Math.floor(touchs.current.end.x) < 0
       ) {
         touchs.current.gestureBack = true;
-        timer = setTimeout(() => {
-          touchs.current.gestureBack = false;
-        }, 1000);
-      }
-    });
-
-    window.addEventListener("oncompositionstart", function () {
-      console.log("oncompositionstart");
-    });
-
-    window.addEventListener("ondragstart", function () {
-      console.log("ondragstart");
-    });
-
-    window.addEventListener("mousewheel", (e) => {
-      const deltaX = (e as WheelEvent).deltaX;
-      if (deltaX < 0) {
-        touchs.current.gestureBack = true;
-        clearTimeout(timer);
         timer = setTimeout(() => {
           touchs.current.gestureBack = false;
         }, 1000);
@@ -160,7 +137,6 @@ export default function Router({ history, stack, children }: Props) {
             .map(([key, value]) => `${key}: ${value}`)
             .join(",")}
         </div> */}
-        <div></div>
       </HistoryContextProvider>
     </RouterContext.Provider>
   );
