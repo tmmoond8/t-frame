@@ -136,9 +136,13 @@ function useGesture() {
         x: changedTouches[0].clientX,
         y: changedTouches[0].clientY,
       };
-      if (
+      const isBackGesture =
         Math.floor(touchs.current.start.x) < 20 &&
-        Math.floor(touchs.current.end.x) < 0
+        Math.floor(touchs.current.end.x) < 0;
+      if (
+        isBackGesture ||
+        Math.floor(touchs.current.end.x) - Math.floor(touchs.current.start.x) >
+          50
       ) {
         touchs.current.gestureBack = true;
         timer.current.gestureBack = setTimeout(() => {
