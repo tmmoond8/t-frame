@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { useRouterContext } from "..";
 import { useStack } from "../contexts/stackContext";
 import Stack from "./Stack";
@@ -38,6 +39,12 @@ export default function Routes({ children }: Props) {
 
   return (
     <React.Fragment>
+      <StackInfo>
+        {stack.all
+          // .concat(stack.trashs)
+          .map(({ level, path }) => `${level}:${path}`)
+          .join(", ")}
+      </StackInfo>
       {stack.all
         .concat(stack.trashs)
         .map(({ id, level, path, skipAnimation }) => {
@@ -63,3 +70,14 @@ export default function Routes({ children }: Props) {
     </React.Fragment>
   );
 }
+
+const StackInfo = styled.span`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0.6;
+  padding: 4px;
+  background: #444;
+  color: white;
+  z-index: 100;
+`;
