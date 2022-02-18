@@ -5,6 +5,7 @@ import { ScreenStack } from "../modules/Stack";
 import Router from "./Router";
 import { StackContextProvider } from "../contexts/stackContext";
 import Header from "./Header";
+import DevLog from "./DevLog";
 
 interface Props {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ export default function BrowserRouter({ children, screenOptions }: Props) {
     <StackContextProvider stack={stack}>
       <Router history={history} stack={stack}>
         <FullSizeWrapper>
+          <DevLog />
           {screenOptions && <Header screenOptions={screenOptions} />}
           <Main>{children}</Main>
         </FullSizeWrapper>
