@@ -16,6 +16,8 @@ export class ScreenStack {
     const storedStack = JSON.parse(
       sessionStorage.getItem(STACK_SESSION_STORE) ?? "null"
     );
+    // FIXME 디버깅용
+    (window as any).stack = this;
     if (storedStack) {
       this.stack = storedStack.stack;
       this._trashs = storedStack.trashs;
@@ -54,11 +56,21 @@ export class ScreenStack {
   push(path: string) {
     console.info("stack: push", path);
 
-    const stack = this.stack.push({
+    const nextLevel = this.size;
+    this.stack.push({
       id: genID(),
-      level: this.size,
+      level: nextLevel,
       path,
     });
+    this._trashs = Object.entries(this._trashs).reduce(
+      (acc, [level, stack]) => {
+        if (stack.level !== nextLevel) {
+          acc[Number(level)] = stack;
+        }
+        return acc;
+      },
+      {} as Record<number, StackItem>
+    );
     sessionStorage.setItem(
       STACK_SESSION_STORE,
       JSON.stringify({
@@ -66,8 +78,6 @@ export class ScreenStack {
         trashs: this._trashs,
       })
     );
-
-    return stack;
   }
 
   restore() {
