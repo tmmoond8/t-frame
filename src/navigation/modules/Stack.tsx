@@ -102,6 +102,13 @@ export class ScreenStack {
       );
       nextStack.skipAnimation = true;
       this.stack.push(nextStack);
+      sessionStorage.setItem(
+        STACK_SESSION_STORE,
+        JSON.stringify({
+          stack: this.stack,
+          trashs: this._trashs,
+        })
+      );
       setTimeout(() => {
         nextStack.skipAnimation = false;
       }, 1000);
