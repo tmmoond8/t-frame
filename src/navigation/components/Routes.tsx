@@ -15,10 +15,10 @@ export default function Routes({ children }: Props) {
   const { setOption } = useHeader();
 
   console.log("location", location);
-  console.log("current", stack.current);
-  console.log("prev", stack.prev);
-
-  console.log("---", stack.trashs);
+  // console.log("current", stack.current);
+  // console.log("prev", stack.prev);
+  console.log("stack.all", stack.all);
+  console.log("stack.trashs", stack.trashs);
 
   const childrenType = toString.call(children);
   const routes =
@@ -40,10 +40,14 @@ export default function Routes({ children }: Props) {
   return (
     <React.Fragment>
       <StackInfo>
-        {stack.all
-          // .concat(stack.trashs)
-          .map(({ level, path }) => `${level}:${path}`)
-          .join(", ")}
+        <p>
+          current:
+          {stack.all.map(({ level, path }) => `${level}:${path}`).join(", ")}
+        </p>
+        <p>
+          trashs:
+          {stack.trashs.map(({ level, path }) => `${level}:${path}`).join(", ")}
+        </p>
       </StackInfo>
       {stack.all
         .concat(stack.trashs)

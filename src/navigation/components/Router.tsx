@@ -2,6 +2,8 @@ import React from "react";
 import { createHistory } from "../contexts/historyContext";
 import { ScreenStack } from "../modules/Stack";
 import { HistoryContextProvider } from "../contexts/historyContext";
+import { useDevLog } from "./DevLog";
+
 interface RouterContextObject {
   location: string;
 }
@@ -26,11 +28,15 @@ interface Point {
 
 export default function Router({ history, stack, children }: Props) {
   const [location, setLocation] = React.useState(window.location.pathname);
-  const [log, setLog] = React.useState({});
-  const { touchs } = useGesture();
+  const { setLog } = useDevLog();
+
+  const { touchs } = useGesture(setLog);
+
+  // useEffect(() => {
+  //   setLog(JSON.stringify(touchs));
+  // }, [JSON.stringify(touchs)]);
 
   React.useEffect(() => {
-    console.log("useEffect listen");
     const unlisten = history.listen((location) => {
       setLocation(location);
     });
@@ -41,10 +47,24 @@ export default function Router({ history, stack, children }: Props) {
   React.useEffect(() => {
     const popStateEvent = (e: PopStateEvent) => {
       const path = window.history.state?.path ?? "/";
+      console.log("path", path);
+
+      console.log("popstate", {
+        xS: touchs.current.start.x,
+        xE: touchs.current.end.x,
+        forward: touchs.current.gestureForward,
+      });
 
       if (touchs.current.gestureBack) {
+        console.log("router gestureBack");
         stack.pop({ skipAnimation: true });
         setLocation(stack.current.path);
+        return;
+      }
+      if (touchs.current.gestureForward) {
+        console.log("router gestureForward");
+        stack.restore();
+        setLocation(path);
         return;
       }
 
@@ -53,6 +73,7 @@ export default function Router({ history, stack, children }: Props) {
           useHistory: false,
         });
       } else {
+        console.log("router history push");
         history.push(path, {
           useHistory: false,
         });
@@ -73,51 +94,30 @@ export default function Router({ history, stack, children }: Props) {
     >
       <HistoryContextProvider history={history}>
         {children}
-        {/* <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            margin: "auto",
-            width: "100px",
-            height: "100px",
-            wordWrap: "break-word",
-            backgroundColor: "rgba(30, 30, 30, 0.5)",
-            color: "white",
-          }}
-        >
-          {Object.entries({
-            gestureBack: touchs.current.gestureBack,
-            path: window.history.state?.path ?? "/",
-            stackSize: stack.size,
-            location,
-            currentPath: stack.current.path,
-          })
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(",")}
-        </div> */}
       </HistoryContextProvider>
     </RouterContext.Provider>
   );
 }
 
-function useGesture() {
+function useGesture(setLog: any) {
   const timer = React.useRef<{
     gestureBack: ReturnType<typeof setTimeout>;
+    gestureForward: ReturnType<typeof setTimeout>;
   }>({
     gestureBack: setTimeout(() => {}),
+    gestureForward: setTimeout(() => {}),
   });
   const touchs = React.useRef<{
     start: Point;
     end: Point;
     gestureBack: boolean;
+    gestureForward: boolean;
     deltaX: number;
   }>({
     start: { x: 0, y: 0 },
     end: { x: 0, y: 0 },
     gestureBack: false,
+    gestureForward: false,
     deltaX: 0,
   });
 
@@ -136,28 +136,85 @@ function useGesture() {
         x: changedTouches[0].clientX,
         y: changedTouches[0].clientY,
       };
-      const isBackGesture =
-        Math.floor(touchs.current.start.x) < 20 &&
+      const isBackGesture1 =
+        Math.floor(touchs.current.start.x) < 50 &&
         Math.floor(touchs.current.end.x) < 0;
-      if (
-        isBackGesture ||
+      const isBackGesture2 =
         Math.floor(touchs.current.end.x) - Math.floor(touchs.current.start.x) >
-          50
-      ) {
+        50;
+
+      if (isBackGesture1 || isBackGesture2) {
         touchs.current.gestureBack = true;
         timer.current.gestureBack = setTimeout(() => {
           touchs.current.gestureBack = false;
+        }, 3000);
+      }
+
+      const deviceWidth = window.innerWidth;
+
+      const isForwardGesture1 = Math.floor(touchs.current.end.x) < 0;
+      const isForwardGesture2 =
+        touchs.current.start.x > deviceWidth - 50 &&
+        touchs.current.start.x - touchs.current.end.x > 80;
+      if (isForwardGesture1 || isForwardGesture2) {
+        console.log("set gestureForward", true);
+        touchs.current.gestureForward = true;
+        timer.current.gestureForward = setTimeout(() => {
+          touchs.current.gestureForward = false;
+        }, 3000);
+      }
+      setLog(
+        JSON.stringify({ ...touchs, isForwardGesture1, isForwardGesture2 })
+      );
+    };
+
+    const touchMoveEvent = (e: TouchEvent) => {
+      const { changedTouches } = e;
+      touchs.current.end = {
+        x: changedTouches[0].clientX,
+        y: changedTouches[0].clientY,
+      };
+      const isBackGesture1 =
+        Math.floor(touchs.current.start.x) < 50 &&
+        Math.floor(touchs.current.end.x) < 0;
+      const isBackGesture2 =
+        Math.floor(touchs.current.end.x) - Math.floor(touchs.current.start.x) >
+        50;
+
+      if (isBackGesture1 || isBackGesture2) {
+        touchs.current.gestureBack = true;
+        clearTimeout(timer.current.gestureBack);
+        timer.current.gestureBack = setTimeout(() => {
+          touchs.current.gestureBack = false;
+        }, 1000);
+      }
+
+      const deviceWidth = window.innerWidth;
+
+      const isForwardGesture1 = Math.floor(touchs.current.end.x) < 0;
+      const isForwardGesture2 =
+        touchs.current.start.x > deviceWidth - 50 &&
+        touchs.current.start.x - touchs.current.end.x > 15;
+      if (isForwardGesture1 || isForwardGesture2) {
+        console.log("set gestureForward", true);
+        touchs.current.gestureForward = true;
+        clearTimeout(timer.current.gestureForward);
+        timer.current.gestureForward = setTimeout(() => {
+          touchs.current.gestureForward = false;
         }, 1000);
       }
     };
 
     window.addEventListener("touchstart", touchStartEvent);
-    window.addEventListener("touchend", touchEndEvent);
+    window.addEventListener("touchmove", touchMoveEvent);
+    // window.addEventListener("touchend", touchEndEvent);
 
     return () => {
       window.removeEventListener("touchstart", touchStartEvent);
-      window.removeEventListener("touchend", touchEndEvent);
+      window.removeEventListener("touchmove", touchMoveEvent);
+      // window.removeEventListener("touchend", touchEndEvent);
       clearTimeout(timer.current.gestureBack);
+      clearTimeout(timer.current.gestureForward);
     };
   }, []);
 

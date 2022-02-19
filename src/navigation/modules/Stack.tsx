@@ -70,6 +70,29 @@ export class ScreenStack {
     return stack;
   }
 
+  restore() {
+    const currentLevel = this.current.level;
+    console.log("currentLevel", currentLevel);
+    console.log("this._trashs", this._trashs);
+    const nextStack = this._trashs[currentLevel + 1];
+    if (nextStack) {
+      console.log("restore", nextStack);
+      this._trashs = Object.entries(this._trashs).reduce(
+        (acc, [level, stack]) => {
+          if (stack !== nextStack) {
+            acc[Number(level)] = stack;
+          }
+          return acc;
+        },
+        {} as Record<number, StackItem>
+      );
+      this.stack.push({
+        ...nextStack,
+        skipAnimation: true,
+      });
+    }
+  }
+
   pop(options?: Partial<StackItem>) {
     console.info("stack: pop");
     const popped = this.stack.pop();

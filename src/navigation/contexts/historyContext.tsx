@@ -54,7 +54,9 @@ export const createHistory = (stack: ScreenStack) => {
       listenres.call(path);
     },
     pop({ useHistory = true, skipAnimation = false }: PopOptions = {}) {
-      console.info("history pop");
+      console.info(
+        `history pop - useHistory: ${useHistory} skipAnimation: ${skipAnimation}`
+      );
       if (useHistory) {
         window.history.back();
         return;
@@ -74,7 +76,6 @@ function createEvents() {
 
   return {
     push(func: Handler) {
-      console.info("handlers push", handlers.length + 1);
       handlers.push(func);
       const removeHandler = () => {
         handlers = handlers.filter((handler) => handler !== func);
@@ -82,7 +83,6 @@ function createEvents() {
       return removeHandler;
     },
     call(location: string) {
-      console.info("handlers call", handlers.length);
       handlers.forEach((func) => func(location));
     },
   };
