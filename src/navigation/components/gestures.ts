@@ -20,6 +20,7 @@ export const isForwardGesture = ({ startX, endX }: GestureParams) => {
 };
 
 export function useGesture(gestureData: GestureData) {
+  const timer = React.useRef<ReturnType<typeof setTimeout>>();
   React.useEffect(() => {
     const touchStartEvent = (e: TouchEvent) => {
       const { changedTouches } = e;
@@ -35,6 +36,16 @@ export function useGesture(gestureData: GestureData) {
         x: changedTouches[0].clientX,
         y: changedTouches[0].clientY,
       };
+      timer.current = setTimeout(() => {
+        gestureData.start = {
+          x: 0,
+          y: 0,
+        };
+        gestureData.end = {
+          x: 0,
+          y: 0,
+        };
+      }, 1000);
     };
 
     window.addEventListener("touchstart", touchStartEvent);
@@ -43,6 +54,9 @@ export function useGesture(gestureData: GestureData) {
     return () => {
       window.removeEventListener("touchstart", touchStartEvent);
       window.removeEventListener("touchmove", touchMoveEvent);
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
     };
   }, []);
 

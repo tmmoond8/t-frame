@@ -28,7 +28,7 @@ export class ScreenStack {
         id: genID(),
         level: 0,
         path: window.location.pathname,
-        skipAnimation: false,
+        skipAnimation: true,
       },
     ];
   }
@@ -51,6 +51,10 @@ export class ScreenStack {
 
   get size() {
     return this.stack.length;
+  }
+
+  findTrash(level: number) {
+    return this._trashs[level];
   }
 
   push(path: string) {
@@ -96,10 +100,11 @@ export class ScreenStack {
         },
         {} as Record<number, StackItem>
       );
-      this.stack.push({
-        ...nextStack,
-        skipAnimation: true,
-      });
+      nextStack.skipAnimation = true;
+      this.stack.push(nextStack);
+      setTimeout(() => {
+        nextStack.skipAnimation = false;
+      }, 1000);
     }
   }
 

@@ -40,41 +40,6 @@ const slideOut = {
   },
 };
 
-// const fadeIn = {
-//   from: {
-//     filter: "brightness(0.9)",
-//   },
-//   to: {
-//     filter: "brightness(1)",
-//   },
-// };
-// const fadeOut = {
-//   from: {
-//     filter: "brightness(1)",
-//   },
-//   to: {
-//     filter: "brightness(0.9)",
-//   },
-// };
-
-const flashOut = {
-  from: {
-    transform: "translateX(10000%)",
-  },
-  to: {
-    transform: "translateX(100000%)",
-  },
-};
-
-const flashIn = {
-  from: {
-    transform: "translateX(0%)",
-  },
-  to: {
-    transform: "translateX(0%)",
-  },
-};
-
 export default React.memo(function Stack({
   children,
   isFocusing = true,

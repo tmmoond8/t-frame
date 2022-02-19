@@ -64,14 +64,17 @@ export default function Router({ history, stack, children }: Props) {
         xE: gestureData.current.end.x,
       });
 
-      if (gestureData.current.gestureBack) {
+      if (gestureData.current.gestureBack && path === stack?.prev?.path) {
         gestureData.current.gestureBack = false;
         console.log("router gestureBack");
         stack.pop({ skipAnimation: true });
         setLocation(stack.current.path);
         return;
       }
-      if (gestureData.current.gestureForward) {
+      if (
+        gestureData.current.gestureForward &&
+        path === stack.findTrash(stack.size)?.path
+      ) {
         gestureData.current.gestureForward = false;
         console.log("router gestureForward");
         stack.restore();
