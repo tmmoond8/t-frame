@@ -58,13 +58,19 @@ export default function Router({ history, stack, children }: Props) {
 
       handleBackGesture(gestureData.current, timers.current);
       handleForwardGesture(gestureData.current, timers.current);
+      const isSafariGestureBack = gestureData.current.deltaX < 0;
+      const isSafariGestureForward = gestureData.current.deltaX > 0;
 
       console.log("popstate", {
         xS: gestureData.current.start.x,
         xE: gestureData.current.end.x,
       });
 
-      if (gestureData.current.gestureBack && path === stack?.prev?.path) {
+      console.log("deltaX", gestureData.current.deltaX);
+      if (
+        (gestureData.current.gestureBack || isSafariGestureBack) &&
+        path === stack?.prev?.path
+      ) {
         gestureData.current.gestureBack = false;
         console.log("router gestureBack");
         stack.pop({ skipAnimation: true });
@@ -72,7 +78,7 @@ export default function Router({ history, stack, children }: Props) {
         return;
       }
       if (
-        gestureData.current.gestureForward &&
+        (gestureData.current.gestureForward || isSafariGestureForward) &&
         path === stack.findTrash(stack.size)?.path
       ) {
         gestureData.current.gestureForward = false;

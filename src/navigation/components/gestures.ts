@@ -1,4 +1,5 @@
 import React from "react";
+import { throttle } from "throttle-debounce";
 import type { Timers, GestureData } from "../types";
 
 interface GestureParams {
@@ -23,6 +24,7 @@ export function useGesture(gestureData: GestureData) {
   const timer = React.useRef<ReturnType<typeof setTimeout>>();
   React.useEffect(() => {
     const touchStartEvent = (e: TouchEvent) => {
+      console.log("touch start");
       const { changedTouches } = e;
       gestureData.start = {
         x: changedTouches[0].clientX,
@@ -31,6 +33,7 @@ export function useGesture(gestureData: GestureData) {
     };
 
     const touchMoveEvent = (e: TouchEvent) => {
+      console.log("touch end");
       const { changedTouches } = e;
       gestureData.end = {
         x: changedTouches[0].clientX,
@@ -60,23 +63,18 @@ export function useGesture(gestureData: GestureData) {
     };
   }, []);
 
-  // React.useEffect(() => {
-  //   const mouseWheelEvent = (e: Event) => {
-  //     const deltaX = (e as WheelEvent).deltaX;
-  //     if (deltaX < 0) {
-  //       touchs.current.gestureBack = true;
-  //       clearTimeout(timer.current.gestureBack);
-  //       timer.current.gestureBack = setTimeout(() => {
-  //         touchs.current.gestureBack = false;
-  //       }, 1000);
-  //     }
-  //   };
-  //   window.addEventListener("mousewheel", mouseWheelEvent);
+  React.useEffect(() => {
+    window.addEventListener("wheel", (e) => {
+      gestureData.deltaX = e.deltaX;
+    });
 
-  //   return () => {
-  //     clearTimeout(timer.current.gestureBack);
-  //   };
-  // }, []);
+    window.addEventListener(
+      "pointermove",
+      throttle(500, (e) => {
+        gestureData.deltaX = 0;
+      })
+    );
+  }, []);
 }
 
 export const handleBackGesture = (gestureData: GestureData, timers: Timers) => {
