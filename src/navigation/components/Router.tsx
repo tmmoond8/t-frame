@@ -11,6 +11,7 @@ import {
 import type { Timers, GestureData } from "../types";
 interface RouterContextObject {
   location: string;
+  gestureData: GestureData;
 }
 
 const RouterContext = React.createContext<RouterContextObject>(null!);
@@ -35,6 +36,8 @@ export default function Router({ history, stack, children }: Props) {
     gestureBack: false,
     gestureForward: false,
     deltaX: 0,
+    isBack: false,
+    isForward: false,
   });
   const timers = React.useRef<Timers>({
     gestureBack: setTimeout(() => {}),
@@ -53,6 +56,7 @@ export default function Router({ history, stack, children }: Props) {
 
   React.useEffect(() => {
     const popStateEvent = (e: PopStateEvent) => {
+      console.log("popstate", gestureData.current);
       const path = window.history.state?.path ?? "/";
       console.log("path", path);
 
@@ -61,26 +65,28 @@ export default function Router({ history, stack, children }: Props) {
       const isSafariGestureBack = gestureData.current.deltaX < 0;
       const isSafariGestureForward = gestureData.current.deltaX > 0;
 
+      gestureData.current.isBack =
+        (gestureData.current.gestureBack || isSafariGestureBack) &&
+        path === stack?.prev?.path;
+
+      gestureData.current.isForward =
+        (gestureData.current.gestureForward || isSafariGestureForward) &&
+        path === stack.findTrash(stack.size)?.path;
+
       console.log("popstate", {
         xS: gestureData.current.start.x,
         xE: gestureData.current.end.x,
       });
 
       console.log("deltaX", gestureData.current.deltaX);
-      if (
-        (gestureData.current.gestureBack || isSafariGestureBack) &&
-        path === stack?.prev?.path
-      ) {
+      if (gestureData.current.isBack) {
         gestureData.current.gestureBack = false;
         console.log("router gestureBack");
-        stack.pop({ skipAnimation: true });
+        stack.pop();
         setLocation(stack.current.path);
         return;
       }
-      if (
-        (gestureData.current.gestureForward || isSafariGestureForward) &&
-        path === stack.findTrash(stack.size)?.path
-      ) {
+      if (gestureData.current.isForward) {
         gestureData.current.gestureForward = false;
         console.log("router gestureForward");
         stack.restore();
@@ -114,6 +120,7 @@ export default function Router({ history, stack, children }: Props) {
     <RouterContext.Provider
       value={{
         location,
+        gestureData: gestureData.current,
       }}
     >
       <HistoryContextProvider history={history}>

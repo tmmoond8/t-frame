@@ -104,11 +104,11 @@ export default React.memo(function Stack({
   React.useEffect(() => {
     if (skipAnimation) {
       setTimeout(() => {
-        const targetStack = stack.findStack(stackId);
-        if (targetStack) {
-          targetStack.skipAnimation = false;
-        }
-      }, 1000);
+        // const targetStack = stack.findStack(stackId);
+        // if (targetStack) {
+        //   targetStack.skipAnimation = false;
+        // }
+      }, 500);
     }
   }, [skipAnimation]);
 

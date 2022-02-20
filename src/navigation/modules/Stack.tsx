@@ -2,7 +2,6 @@ interface StackItem {
   id: string;
   level: number;
   path: string;
-  skipAnimation?: boolean;
 }
 
 const genID = () => (Math.random() * 123).toString(32).split(".")[1];
@@ -28,7 +27,6 @@ export class ScreenStack {
         id: genID(),
         level: 0,
         path: window.location.pathname,
-        skipAnimation: true,
       },
     ];
   }
@@ -104,7 +102,6 @@ export class ScreenStack {
         },
         {} as Record<number, StackItem>
       );
-      nextStack.skipAnimation = true;
       this.stack.push(nextStack);
       sessionStorage.setItem(
         STACK_SESSION_STORE,

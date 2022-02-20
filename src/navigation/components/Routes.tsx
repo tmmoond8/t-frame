@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Routes({ children }: Props) {
-  const { location } = useRouterContext();
+  const { location, gestureData } = useRouterContext();
   const stack = useStack();
   const { setOption } = useHeader();
 
@@ -37,6 +37,24 @@ export default function Routes({ children }: Props) {
     });
   }, [stack.current.id]);
 
+  console.log(
+    `gestureData.isBack: ${gestureData.isBack}, gestureData.isForward: ${gestureData.isForward}`
+  );
+
+  React.useEffect(() => {
+    console.log("++++");
+    if (gestureData.isBack) {
+      gestureData.deltaX = 0;
+      gestureData.gestureBack = false;
+      console.log("init isBack");
+    }
+    if (gestureData.isForward) {
+      gestureData.deltaX = 0;
+      gestureData.gestureForward = false;
+      console.log("init isForward");
+    }
+  }, [gestureData.isBack, gestureData.isForward]);
+
   return (
     <React.Fragment>
       <StackInfo>
@@ -49,29 +67,27 @@ export default function Routes({ children }: Props) {
           {stack.trashs.map(({ level, path }) => `${level}:${path}`).join(", ")}
         </p>
       </StackInfo>
-      {stack.all
-        .concat(stack.trashs)
-        .map(({ id, level, path, skipAnimation }) => {
-          const targetElement = (routes as React.ReactElement[]).find(
-            (route) => route?.props?.path === path
-          );
-          const Page = targetElement!.props.component;
-          const isFocusing = id === stack.current.id;
+      {stack.all.concat(stack.trashs).map(({ id, level, path }) => {
+        const targetElement = (routes as React.ReactElement[]).find(
+          (route) => route?.props?.path === path
+        );
+        const Page = targetElement!.props.component;
+        const isFocusing = id === stack.current.id;
 
-          return (
-            <Stack
-              stackId={id}
-              key={id}
-              level={level}
-              isFocusing={isFocusing}
-              path={path}
-              isPopped={stack.trashs.some((trash) => trash.id === id)}
-              skipAnimation={skipAnimation}
-            >
-              <Page />
-            </Stack>
-          );
-        })}
+        return (
+          <Stack
+            stackId={id}
+            key={id}
+            level={level}
+            isFocusing={isFocusing}
+            path={path}
+            isPopped={stack.trashs.some((trash) => trash.id === id)}
+            skipAnimation={gestureData.isBack || gestureData.isForward}
+          >
+            <Page />
+          </Stack>
+        );
+      })}
     </React.Fragment>
   );
 }

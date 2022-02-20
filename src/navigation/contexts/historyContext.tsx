@@ -29,7 +29,6 @@ interface PushOptions {
 
 interface PopOptions {
   useHistory?: boolean;
-  skipAnimation?: boolean;
 }
 
 export const createHistory = (stack: ScreenStack) => {
@@ -53,17 +52,13 @@ export const createHistory = (stack: ScreenStack) => {
       stack.push(path);
       listenres.call(path);
     },
-    pop({ useHistory = true, skipAnimation = false }: PopOptions = {}) {
-      console.info(
-        `history pop - useHistory: ${useHistory} skipAnimation: ${skipAnimation}`
-      );
+    pop({ useHistory = true }: PopOptions = {}) {
+      console.info(`history pop - useHistory: ${useHistory}`);
       if (useHistory) {
         window.history.back();
         return;
       }
-      stack.pop({
-        skipAnimation,
-      });
+      stack.pop();
       listenres.call(stack.current.path);
     },
   };

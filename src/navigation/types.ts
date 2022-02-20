@@ -14,4 +14,6 @@ export interface GestureData {
   gestureBack: boolean;
   gestureForward: boolean;
   deltaX: number;
+  isBack: boolean;
+  isForward: boolean;
 }
