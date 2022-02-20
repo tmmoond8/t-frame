@@ -3,9 +3,11 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { animated, useSpring } from "@react-spring/web";
 import { useDevLog } from "./DevLog";
+import { useStack } from "../contexts/stackContext";
 
 interface Props {
   children: React.ReactNode;
+  stackId: string;
   isFocusing?: boolean;
   path: string;
   isPopped: boolean;
@@ -42,6 +44,7 @@ const slideOut = {
 
 export default React.memo(function Stack({
   children,
+  stackId,
   isFocusing = true,
   isPopped,
   path,
@@ -51,11 +54,12 @@ export default React.memo(function Stack({
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
   const [noAnimatedX, setNoAnimatedX] = React.useState<string | null>(null);
   const focusShadowValue = React.useRef(true);
+  const stack = useStack();
   const { setLog } = useDevLog();
   // setLog("skip " + skipAnimation + " level " + level);
 
   React.useEffect(() => {
-    if (level === 0 || skipAnimation) {
+    if (skipAnimation) {
       setAnimation(fixed);
       setNoAnimatedX(null);
     } else {
@@ -92,6 +96,21 @@ export default React.memo(function Stack({
       setNoAnimatedX(null);
     }
   }, [isPopped, skipAnimation]);
+
+  React.useEffect(() => {
+    console.log(`focusing ${path} : ${isFocusing}, skip: ${skipAnimation}`);
+  }, [isFocusing, skipAnimation]);
+
+  React.useEffect(() => {
+    if (skipAnimation) {
+      setTimeout(() => {
+        const targetStack = stack.findStack(stackId);
+        if (targetStack) {
+          targetStack.skipAnimation = false;
+        }
+      }, 1000);
+    }
+  }, [skipAnimation]);
 
   const animationStyle = useSpring(animation);
 

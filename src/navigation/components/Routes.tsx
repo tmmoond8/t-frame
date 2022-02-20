@@ -60,6 +60,7 @@ export default function Routes({ children }: Props) {
 
           return (
             <Stack
+              stackId={id}
               key={id}
               level={level}
               isFocusing={isFocusing}

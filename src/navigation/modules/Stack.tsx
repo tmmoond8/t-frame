@@ -53,6 +53,10 @@ export class ScreenStack {
     return this.stack.length;
   }
 
+  findStack(id: string) {
+    return this.stack.find((stack) => stack.id === id);
+  }
+
   findTrash(level: number) {
     return this._trashs[level];
   }
@@ -109,9 +113,6 @@ export class ScreenStack {
           trashs: this._trashs,
         })
       );
-      setTimeout(() => {
-        nextStack.skipAnimation = false;
-      }, 1000);
     }
   }
 
