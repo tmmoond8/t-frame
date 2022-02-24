@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { createHistory } from "../contexts/historyContext";
-import { ScreenStack } from "../modules/Stack";
+import { StackManager } from "../modules/stackManager";
 import Router from "./Router";
 import { StackContextProvider } from "../contexts/stackContext";
 import Header from "./Header";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function BrowserRouter({ children, screenOptions }: Props) {
-  const stack = new ScreenStack();
+  const stack = new StackManager();
   const history = createHistory(stack);
   return (
     <StackContextProvider stack={stack}>

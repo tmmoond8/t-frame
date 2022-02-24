@@ -1,6 +1,6 @@
 import React from "react";
 import { createHistory } from "../contexts/historyContext";
-import { ScreenStack } from "../modules/Stack";
+import { StackManager } from "../modules/stackManager";
 import { HistoryContextProvider } from "../contexts/historyContext";
 import { useDevLog } from "./DevLog";
 import {
@@ -24,7 +24,7 @@ export const useRouterContext = () => React.useContext(RouterContext);
 interface Props {
   children: React.ReactNode;
   history: ReturnType<typeof createHistory>;
-  stack: ScreenStack;
+  stack: StackManager;
 }
 
 export default function Router({ history, stack, children }: Props) {

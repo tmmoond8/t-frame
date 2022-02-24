@@ -1,5 +1,5 @@
 import React from "react";
-import { ScreenStack } from "../modules/Stack";
+import { StackManager } from "../modules/stackManager";
 
 const HistoryContext = React.createContext<{
   history: ReturnType<typeof createHistory>;
@@ -31,7 +31,7 @@ interface PopOptions {
   useHistory?: boolean;
 }
 
-export const createHistory = (stack: ScreenStack) => {
+export const createHistory = (stack: StackManager) => {
   const listenres = createEvents();
   const history = {
     listen(listener: Handler) {

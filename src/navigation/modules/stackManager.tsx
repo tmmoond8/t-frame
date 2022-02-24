@@ -1,4 +1,4 @@
-interface StackItem {
+interface StackNode {
   id: string;
   level: number;
   path: string;
@@ -7,9 +7,9 @@ interface StackItem {
 const genID = () => (Math.random() * 123).toString(32).split(".")[1];
 const STACK_SESSION_STORE = "STACK_SESSION_STORE";
 
-export class ScreenStack {
-  private stack: StackItem[] = [];
-  private _trashs: Record<number, StackItem> = {};
+export class StackManager {
+  private stack: StackNode[] = [];
+  private _trashs: Record<number, StackNode> = {};
 
   constructor() {
     const storedStack = JSON.parse(
@@ -75,15 +75,12 @@ export class ScreenStack {
         }
         return acc;
       },
-      {} as Record<number, StackItem>
+      {} as Record<number, StackNode>
     );
-    sessionStorage.setItem(
-      STACK_SESSION_STORE,
-      JSON.stringify({
-        stack: this.stack,
-        trashs: this._trashs,
-      })
-    );
+    saveStack({
+      stack: this.stack,
+      trashs: this._trashs,
+    });
   }
 
   restore() {
@@ -100,7 +97,7 @@ export class ScreenStack {
           }
           return acc;
         },
-        {} as Record<number, StackItem>
+        {} as Record<number, StackNode>
       );
       this.stack.push(nextStack);
       sessionStorage.setItem(
@@ -113,24 +110,37 @@ export class ScreenStack {
     }
   }
 
-  pop(options?: Partial<StackItem>) {
+  pop(options?: Partial<StackNode>) {
     console.info("stack: pop");
     const popped = this.stack.pop();
     this._trashs[this.size] = {
       ...popped!,
       ...options,
     };
-    sessionStorage.setItem(
-      STACK_SESSION_STORE,
-      JSON.stringify({
-        stack: this.stack,
-        trashs: this._trashs,
-      })
-    );
+    saveStack({
+      stack: this.stack,
+      trashs: this._trashs,
+    });
     return popped ?? null;
   }
 
   get screens() {
     return this.stack.map(({ path }) => path);
   }
+}
+
+function saveStack({
+  stack,
+  trashs,
+}: {
+  stack: StackNode[];
+  trashs: Record<number, StackNode>;
+}) {
+  sessionStorage.setItem(
+    STACK_SESSION_STORE,
+    JSON.stringify({
+      stack,
+      trashs,
+    })
+  );
 }

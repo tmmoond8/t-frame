@@ -1,11 +1,11 @@
 import React from "react";
-import { ScreenStack } from "../modules/Stack";
+import { StackManager } from "../modules/stackManager";
 
-const StackContext = React.createContext<ScreenStack>(null!);
+const StackContext = React.createContext<StackManager>(null!);
 
 interface Props {
   children: React.ReactNode;
-  stack: ScreenStack;
+  stack: StackManager;
 }
 
 export const StackContextProvider = ({ stack, children }: Props) => {
