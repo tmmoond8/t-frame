@@ -1,6 +1,6 @@
 import React from "react";
 import { createHistory } from "../contexts/historyContext";
-import { StackManager } from "../modules/stackManager";
+import { useStack } from "../contexts/stackContext";
 import { HistoryContextProvider } from "../contexts/historyContext";
 import { useDevLog } from "./DevLog";
 import {
@@ -23,11 +23,11 @@ export const useRouterContext = () => React.useContext(RouterContext);
 
 interface Props {
   children: React.ReactNode;
-  history: ReturnType<typeof createHistory>;
-  stack: StackManager;
 }
 
-export default function Router({ history, stack, children }: Props) {
+export default function Router({ children }: Props) {
+  const stack = useStack();
+  const history = createHistory(stack);
   const [location, setLocation] = React.useState(window.location.pathname);
   const { setLog } = useDevLog();
   const gestureData = React.useRef<GestureData>({
