@@ -1,4 +1,4 @@
-interface StackNode {
+export interface StackNode {
   id: string;
   level: number;
   path: string;

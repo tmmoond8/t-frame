@@ -3,6 +3,7 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { animated, useSpring } from "@react-spring/web";
 import { useDevLog } from "./DevLog";
+import { useRouterContext } from "..";
 import { useStack } from "../contexts/stackContext";
 
 interface Props {
@@ -49,14 +50,16 @@ export default React.memo(function Stack({
   isPopped,
   path,
   level,
-  skipAnimation = false,
 }: Props) {
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
   const [noAnimatedX, setNoAnimatedX] = React.useState<string | null>(null);
   const focusShadowValue = React.useRef(true);
   const stack = useStack();
   const { setLog } = useDevLog();
+  const { gestureData } = useRouterContext();
+  console.log(`= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`);
   // setLog("skip " + skipAnimation + " level " + level);
+  const skipAnimation = false;
 
   React.useEffect(() => {
     if (skipAnimation) {
