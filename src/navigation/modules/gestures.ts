@@ -1,6 +1,6 @@
 import React from "react";
 import { throttle } from "throttle-debounce";
-import type { Timers, GestureData } from "../types";
+import type { GestureData } from "../types";
 
 interface GestureParams {
   startX: number;
@@ -20,7 +20,25 @@ export const isForwardGesture = ({ startX, endX }: GestureParams) => {
   return isForwardGesture1 || isForwardGesture2;
 };
 
-export function useGesture(gestureData: GestureData) {
+export function useGestureData() {
+  const gestureData = React.useRef<GestureData>({
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 0 },
+    gestureBack: false,
+    gestureForward: false,
+    deltaX: 0,
+    isBack: false,
+    isForward: false,
+    timers: {
+      gestureBack: setTimeout(() => {}),
+      gestureForward: setTimeout(() => {}),
+    }
+  });
+
+  return gestureData;
+}
+
+export function useTouchEvent(gestureData: GestureData) {
   const timer = React.useRef<ReturnType<typeof setTimeout>>();
   React.useEffect(() => {
     const touchStartEvent = (e: TouchEvent) => {
@@ -77,7 +95,7 @@ export function useGesture(gestureData: GestureData) {
   }, []);
 }
 
-export const handleBackGesture = (gestureData: GestureData, timers: Timers) => {
+export const handleBackGesture = (gestureData: GestureData, prevPath?: string) => {
   if (
     isBackGesture({
       startX: gestureData.start.x,
@@ -85,17 +103,19 @@ export const handleBackGesture = (gestureData: GestureData, timers: Timers) => {
     })
   ) {
     gestureData.gestureBack = true;
-    clearTimeout(timers.gestureBack);
-    timers.gestureBack = setTimeout(() => {
+    clearTimeout(gestureData.timers.gestureBack);
+    gestureData.timers.gestureBack = setTimeout(() => {
       gestureData.gestureBack = false;
     }, 1000);
   }
+  const isSafariGestureBack = gestureData.deltaX < 0;
+  const path = window.history.state?.path ?? "/";
+  gestureData.isBack = 
+    (gestureData.gestureBack || isSafariGestureBack) && 
+    path === prevPath;
 };
 
-export const handleForwardGesture = (
-  gestureData: GestureData,
-  timers: Timers
-) => {
+export const handleForwardGesture = (gestureData: GestureData, forwardPath?: string) => {
   if (
     isForwardGesture({
       startX: gestureData.start.x,
@@ -104,9 +124,14 @@ export const handleForwardGesture = (
   ) {
     console.log("set gestureForward", true);
     gestureData.gestureForward = true;
-    clearTimeout(timers.gestureForward);
-    timers.gestureForward = setTimeout(() => {
+    clearTimeout(gestureData.timers.gestureForward);
+    gestureData.timers.gestureForward = setTimeout(() => {
       gestureData.gestureForward = false;
     }, 1000);
   }
+  const isSafariGestureForward = gestureData.deltaX > 0;
+  const path = window.history.state?.path ?? "/";
+  gestureData.isForward =
+    (gestureData.gestureForward || isSafariGestureForward) &&
+    path === forwardPath;
 };

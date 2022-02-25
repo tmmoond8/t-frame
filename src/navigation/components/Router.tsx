@@ -5,10 +5,11 @@ import { HistoryContextProvider } from "../contexts/historyContext";
 import { useDevLog } from "./DevLog";
 import {
   handleBackGesture,
-  useGesture,
+  useTouchEvent,
   handleForwardGesture,
+  useGestureData,
 } from "../modules/gestures";
-import type { Timers, GestureData } from "../types";
+import type { GestureData } from "../types";
 interface RouterContextObject {
   location: string;
   gestureData: GestureData;
@@ -30,21 +31,9 @@ export default function Router({ children }: Props) {
   const history = createHistory(stack);
   const [location, setLocation] = React.useState(window.location.pathname);
   const { setLog } = useDevLog();
-  const gestureData = React.useRef<GestureData>({
-    start: { x: 0, y: 0 },
-    end: { x: 0, y: 0 },
-    gestureBack: false,
-    gestureForward: false,
-    deltaX: 0,
-    isBack: false,
-    isForward: false,
-  });
-  const timers = React.useRef<Timers>({
-    gestureBack: setTimeout(() => {}),
-    gestureForward: setTimeout(() => {}),
-  });
+  const gestureData = useGestureData();
 
-  useGesture(gestureData.current);
+  useTouchEvent(gestureData.current);
 
   React.useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -60,18 +49,8 @@ export default function Router({ children }: Props) {
       const path = window.history.state?.path ?? "/";
       console.log("path", path);
 
-      handleBackGesture(gestureData.current, timers.current);
-      handleForwardGesture(gestureData.current, timers.current);
-      const isSafariGestureBack = gestureData.current.deltaX < 0;
-      const isSafariGestureForward = gestureData.current.deltaX > 0;
-
-      gestureData.current.isBack =
-        (gestureData.current.gestureBack || isSafariGestureBack) &&
-        path === stack?.prev?.path;
-
-      gestureData.current.isForward =
-        (gestureData.current.gestureForward || isSafariGestureForward) &&
-        path === stack.findTrash(stack.size)?.path;
+      handleBackGesture(gestureData.current, stack?.prev?.path);
+      handleForwardGesture(gestureData.current, stack.findTrash(stack.size)?.path);
 
       console.log("popstate", {
         xS: gestureData.current.start.x,
@@ -86,6 +65,7 @@ export default function Router({ children }: Props) {
         setLocation(stack.current.path);
         return;
       }
+
       if (gestureData.current.isForward) {
         gestureData.current.gestureForward = false;
         console.log("router gestureForward");
@@ -111,8 +91,8 @@ export default function Router({ children }: Props) {
     window.addEventListener("popstate", popStateEvent);
     return () => {
       window.removeEventListener("popstate", popStateEvent);
-      clearTimeout(timers.current.gestureBack);
-      clearTimeout(timers.current.gestureForward);
+      clearTimeout(gestureData.current.timers.gestureBack);
+      clearTimeout(gestureData.current.timers.gestureForward);
     };
   }, []);
 
