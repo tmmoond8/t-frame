@@ -7,7 +7,7 @@ import {
   handleBackGesture,
   useGesture,
   handleForwardGesture,
-} from "./gestures";
+} from "../modules/gestures";
 import type { Timers, GestureData } from "../types";
 interface RouterContextObject {
   location: string;
