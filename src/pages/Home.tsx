@@ -57,7 +57,7 @@ const Item = styled.li`
     cursor: pointer;
 
     img {
-      width: 40vw;
+      width: 100px;
       height: auto;
     }
     .summary {

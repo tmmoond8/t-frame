@@ -59,7 +59,7 @@ export default React.memo(function Stack({
   const { gestureData } = useRouterContext();
   console.log(`= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`);
   // setLog("skip " + skipAnimation + " level " + level);
-  const skipAnimation = false;
+  const skipAnimation = gestureData.isBack || gestureData.isForward;
 
   React.useEffect(() => {
     if (skipAnimation) {

@@ -27,11 +27,15 @@ export function useGestureData() {
     gestureBack: false,
     gestureForward: false,
     deltaX: 0,
-    isBack: false,
-    isForward: false,
+    isBack: true,
+    isForward: true,
     timers: {
-      gestureBack: setTimeout(() => {}),
-      gestureForward: setTimeout(() => {}),
+      gestureBack: setTimeout(() => {
+        gestureData.current.isBack = false;
+      }, 50),
+      gestureForward: setTimeout(() => {
+        gestureData.current.isForward = false;
+      }, 50),
     }
   });
 
@@ -57,6 +61,9 @@ export function useTouchEvent(gestureData: GestureData) {
         x: changedTouches[0].clientX,
         y: changedTouches[0].clientY,
       };
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
       timer.current = setTimeout(() => {
         gestureData.start = {
           x: 0,
@@ -66,7 +73,7 @@ export function useTouchEvent(gestureData: GestureData) {
           x: 0,
           y: 0,
         };
-      }, 1000);
+      }, 200);
     };
 
     window.addEventListener("touchstart", touchStartEvent);
@@ -76,6 +83,14 @@ export function useTouchEvent(gestureData: GestureData) {
       window.removeEventListener("touchstart", touchStartEvent);
       window.removeEventListener("touchmove", touchMoveEvent);
       if (timer.current) {
+        gestureData.start = {
+          x: 0,
+          y: 0,
+        };
+        gestureData.end = {
+          x: 0,
+          y: 0,
+        };
         clearTimeout(timer.current);
       }
     };
