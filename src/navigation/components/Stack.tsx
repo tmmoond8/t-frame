@@ -43,6 +43,28 @@ const slideOut = {
   },
 };
 
+const fadeIn = {
+  from: {
+    transform: "translateX(-20%)",
+    opacity: 0.6,
+  },
+  to: {
+    transform: "translateX(0%)",
+    opacity: 1,
+  }
+}
+
+
+const fadeOut = {
+  from: {
+    transform: "translateX(0%)",
+    opacity: 1,
+  },
+  to: {
+    transform: "translateX(-20%)",
+    opacity: 0.6,
+  }
+}
 export default React.memo(function Stack({
   children,
   stackId,
@@ -73,47 +95,73 @@ export default React.memo(function Stack({
   }, []);
 
   React.useEffect(() => {
-    if (!isFocusing) {
-      // setAnimation(fadeOut);
-    }
-
-    if (focusShadowValue.current === false && isFocusing) {
-      // setAnimation(fadeIn);
-    }
+    const focus = focusShadowValue.current;
     focusShadowValue.current = isFocusing;
-  }, [isFocusing, skipAnimation]);
-
-  React.useEffect(() => {
-    console.log("isPopped", isPopped);
     console.log("skipAnimation", skipAnimation);
-    if (isPopped && skipAnimation) {
+    if (skipAnimation && isPopped) {
+      console.log(`** ${path}: 1`)
       setAnimation(slideOut);
       setNoAnimatedX("translateX(100%) !important");
-    } else if (skipAnimation) {
-      // setAnimation(flashIn);
-      setAnimation(slideIn);
-      setNoAnimatedX("translateX(0%) !important");
-    } else if (isPopped) {
+      return;
+    } 
+    // if (skipAnimation) {
+    //   // setAnimation(flashIn);
+    //   setAnimation(slideIn);
+    //   setNoAnimatedX("translateX(0%) !important");
+    //   return;
+    // }
+    if (isPopped) {
+      console.log(`** ${path}: 2`)
       console.log("isPopped", path);
       setAnimation(slideOut);
       setNoAnimatedX(null);
+      return;
     }
-  }, [isPopped, skipAnimation]);
+    if (skipAnimation && !isFocusing) {
+      console.log(`** ${path}: 3`)
+      setAnimation(slideOut);
+      setNoAnimatedX("translateX(100%) !important");
+      return;
+    }
+    if (skipAnimation && isFocusing ) {
+      console.log(`** ${path}: 4`)
+      setAnimation(slideIn);
+      setNoAnimatedX("translateX(0%) !important");
+      return;
+    }
+    if (!isFocusing) {
+      console.log(`** ${path}: 5`)
+      setNoAnimatedX(null);
+      return setAnimation(fadeOut);
+    }
+
+    if (focus === false && isFocusing) {
+      console.log(`** ${path}: 6`)
+      setNoAnimatedX(null);
+      return setAnimation(fadeIn);
+    }
+  }, [isFocusing, isPopped, skipAnimation]);
+
+  // React.useEffect(() => {
+  //   console.log("isPopped", isPopped);
+  //   console.log("skipAnimation", skipAnimation);
+  //   if (isPopped && skipAnimation) {
+  //     setAnimation(slideOut);
+  //     setNoAnimatedX("translateX(100%) !important");
+  //   } else if (skipAnimation) {
+  //     // setAnimation(flashIn);
+  //     setAnimation(slideIn);
+  //     // setNoAnimatedX("translateX(0%) !important");
+  //   } else if (isPopped) {
+  //     console.log("isPopped", path);
+  //     setAnimation(slideOut);
+  //     setNoAnimatedX(null);
+  //   }
+  // }, [isPopped, skipAnimation]);
 
   React.useEffect(() => {
     console.log(`focusing ${path} : ${isFocusing}, skip: ${skipAnimation}`);
   }, [isFocusing, skipAnimation]);
-
-  React.useEffect(() => {
-    if (skipAnimation) {
-      setTimeout(() => {
-        // const targetStack = stack.findStack(stackId);
-        // if (targetStack) {
-        //   targetStack.skipAnimation = false;
-        // }
-      }, 500);
-    }
-  }, [skipAnimation]);
 
   const animationStyle = useSpring(animation);
 
