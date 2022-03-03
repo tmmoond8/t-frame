@@ -51,9 +51,8 @@ const fadeIn = {
   to: {
     transform: "translateX(0%)",
     opacity: 1,
-  }
-}
-
+  },
+};
 
 const fadeOut = {
   from: {
@@ -63,8 +62,8 @@ const fadeOut = {
   to: {
     transform: "translateX(-20%)",
     opacity: 0.6,
-  }
-}
+  },
+};
 export default React.memo(function Stack({
   children,
   stackId,
@@ -79,7 +78,9 @@ export default React.memo(function Stack({
   const stack = useStack();
   const { setLog } = useDevLog();
   const { gestureData } = useRouterContext();
-  console.log(`= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`);
+  console.log(
+    `= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`
+  );
   // setLog("skip " + skipAnimation + " level " + level);
   const skipAnimation = gestureData.isBack || gestureData.isForward;
 
@@ -99,11 +100,11 @@ export default React.memo(function Stack({
     focusShadowValue.current = isFocusing;
     console.log("skipAnimation", skipAnimation);
     if (skipAnimation && isPopped) {
-      console.log(`** ${path}: 1`)
+      console.log(`** ${path}: 1`);
       setAnimation(slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
-    } 
+    }
     // if (skipAnimation) {
     //   // setAnimation(flashIn);
     //   setAnimation(slideIn);
@@ -111,32 +112,32 @@ export default React.memo(function Stack({
     //   return;
     // }
     if (isPopped) {
-      console.log(`** ${path}: 2`)
+      console.log(`** ${path}: 2`);
       console.log("isPopped", path);
       setAnimation(slideOut);
       setNoAnimatedX(null);
       return;
     }
     if (skipAnimation && !isFocusing) {
-      console.log(`** ${path}: 3`)
+      console.log(`** ${path}: 3`);
       setAnimation(slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
-    if (skipAnimation && isFocusing ) {
-      console.log(`** ${path}: 4`)
+    if (skipAnimation && isFocusing) {
+      console.log(`** ${path}: 4`);
       setAnimation(slideIn);
       setNoAnimatedX("translateX(0%) !important");
       return;
     }
     if (!isFocusing) {
-      console.log(`** ${path}: 5`)
+      console.log(`** ${path}: 5`);
       setNoAnimatedX(null);
       return setAnimation(fadeOut);
     }
 
     if (focus === false && isFocusing) {
-      console.log(`** ${path}: 6`)
+      console.log(`** ${path}: 6`);
       setNoAnimatedX(null);
       return setAnimation(fadeIn);
     }
