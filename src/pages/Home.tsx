@@ -7,17 +7,9 @@ export default function HomePage() {
   const { setOption } = useHeader();
 
   // 고치고 싶다.
-  // useFocusEffect(() => {
-  //   setOption({
-  //     title: "홈",
-  //     useBackButton: false,
-  //     rightMenus: (
-  //       <>
-  //         <button onClick={() => history.push("/editor")}>글 쓰기</button>
-  //       </>
-  //     ),
-  //   });
-  // });
+  useFocusEffect(() => {
+    console.log("home");
+  });
 
   const { data } = useFetch();
   return (
