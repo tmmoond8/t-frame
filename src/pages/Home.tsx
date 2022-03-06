@@ -8,7 +8,7 @@ export default function HomePage() {
 
   // 고치고 싶다.
   useFocusEffect(() => {
-    console.log("home");
+    console.log("useFocusEffect home");
   });
 
   const { data } = useFetch();

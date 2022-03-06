@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
-import {} from "../navigation";
+import { useFocusEffect } from "../navigation";
 
 export default function DetailPage() {
   const [bottle, setBottle] = React.useState({} as any);
+
+  useFocusEffect(() => {
+    console.log("useFocusEffect detail");
+  });
 
   React.useEffect(() => {
     if (window.history.state) {
