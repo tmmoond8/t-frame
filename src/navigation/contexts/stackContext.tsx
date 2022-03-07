@@ -1,4 +1,3 @@
-import path from "path";
 import React from "react";
 import { StackManager } from "../modules/stackManager";
 
@@ -17,7 +16,7 @@ export const StackContextProvider = ({ children }: Props) => {
 
 export const useStack = () => React.useContext(StackContext);
 
-export function useFocusEffect(func: () => void) {
+export function useFocusEffect(func: () => React.EffectCallback | void) {
   const pathRef = React.useRef("");
   const stack = useStack();
 
@@ -26,8 +25,14 @@ export function useFocusEffect(func: () => void) {
   }, []);
 
   React.useEffect(() => {
+    let effect: React.EffectCallback;
     if (pathRef.current === window.location.pathname) {
-      func();
+      effect = func() ?? function () {};
     }
+    return () => {
+      if (effect) {
+        effect();
+      }
+    };
   }, [stack.current.path]);
 }

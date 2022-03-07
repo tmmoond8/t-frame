@@ -21,7 +21,10 @@ export default function Header({ screenOptions }: Props) {
   } = screenOptions ?? {};
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
-  const rightMenu = React.useRef<React.FC>();
+  const [rightMenu, setRightMenu] = React.useState<React.ReactNode | null>(
+    null
+  );
+
   const stack = useStack();
   const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
 
@@ -29,17 +32,21 @@ export default function Header({ screenOptions }: Props) {
 
   React.useEffect(() => {
     const eventHandler = (e: CustomEvent<any>) => {
-      setTitle(e.detail.title ?? "");
-      setShowBack(e.detail.useBackButton ?? false);
-      rightMenu.current = e.detail.rightMenus as React.FC | undefined;
+      if (e.detail.title !== undefined) {
+        setTitle(e.detail.title ?? "");
+      }
+      if (e.detail.useBackButton !== undefined) {
+        setShowBack(e.detail.useBackButton ?? false);
+      }
+      if (e.detail.rightMenus !== undefined) {
+        setRightMenu(e.detail.rightMenus);
+      }
     };
     (window as any).addEventListener(HEADER_EVENTS, eventHandler);
     return () => {
       (window as any).removeEventListener(HEADER_EVENTS, eventHandler);
     };
   }, []);
-
-  const RightMenus: React.FC | null = rightMenu.current || null;
 
   return (
     <StyledHeader style={headerStyle}>
@@ -55,7 +62,7 @@ export default function Header({ screenOptions }: Props) {
       >
         {title}
       </Title>
-      <HeaderSide>{RightMenus && <RightMenus />}</HeaderSide>
+      <HeaderSide>{rightMenu}</HeaderSide>
     </StyledHeader>
   );
 }
@@ -91,22 +98,14 @@ const HeaderSide = styled.div`
 `;
 
 export function useHeader() {
-  const setOption = ({
-    title = "",
-    useBackButton = false,
-    rightMenus,
-  }: {
+  const setOption = (options: {
     title?: string;
     useBackButton?: boolean;
     rightMenus?: React.ReactNode;
   }) => {
     window.dispatchEvent(
       new CustomEvent(HEADER_EVENTS, {
-        detail: {
-          title,
-          useBackButton,
-          rightMenus,
-        },
+        detail: options,
       })
     );
   };

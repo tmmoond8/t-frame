@@ -6,9 +6,18 @@ export default function HomePage() {
   const { history } = useHistory();
   const { setOption } = useHeader();
 
-  // 고치고 싶다.
   useFocusEffect(() => {
-    console.log("useFocusEffect home");
+    setOption({
+      rightMenus: () => (
+        <button onClick={() => history.push("/editor")}>✏️</button>
+      ),
+    });
+
+    return () => {
+      setOption({
+        rightMenus: null,
+      });
+    };
   });
 
   const { data } = useFetch();

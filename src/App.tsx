@@ -16,12 +16,7 @@ function App() {
       }}
     >
       <Routes>
-        <Route
-          path="/"
-          title="Home"
-          component={Pages.Home}
-          rightMenus={HomeRightMenus}
-        />
+        <Route path="/" title="Home" component={Pages.Home} />
         <Route path="/detail" title="Detail" component={Pages.Detail} />
         <Route path="/editor" title="Editor" component={Pages.Editor} />
       </Routes>
@@ -30,8 +25,3 @@ function App() {
 }
 
 export default App;
-
-function HomeRightMenus() {
-  const { history } = useHistory();
-  return <button onClick={() => history.push("/editor")}>✏️</button>;
-}

@@ -22,8 +22,7 @@ export default function Routes({ children }: Props) {
   const childrenType = toString.call(children);
   const routes = React.useMemo(() => {
     return childrenType === "[object Array]" ? (children as any[]) : [children];
-  }, [childrenType, children])
-    ;
+  }, [childrenType, children]);
   const stacks = React.useMemo(() => {
     return stack.all.concat(stack.trashs);
   }, [stack.all.length, stack.trashs.length]);
@@ -37,7 +36,6 @@ export default function Routes({ children }: Props) {
     setOption({
       title: targetElement!.props.title,
       useBackButton: stack.size > 1,
-      rightMenus: targetElement!.props.rightMenus,
     });
   }, [stack.current.id]);
 
@@ -52,14 +50,14 @@ export default function Routes({ children }: Props) {
         gestureData.deltaX = 0;
         gestureData.gestureBack = false;
         console.log("init isBack");
-      }, 100)
+      }, 100);
     }
     if (gestureData.isForward) {
       timer = setTimeout(() => {
         gestureData.deltaX = 0;
         gestureData.gestureForward = false;
         console.log("init isForward");
-      }, 100)
+      }, 100);
     }
     return () => {
       if (timer) {
@@ -67,7 +65,6 @@ export default function Routes({ children }: Props) {
       }
     };
   }, [gestureData.isBack, gestureData.isForward]);
-
 
   return (
     <React.Fragment>
@@ -81,7 +78,7 @@ export default function Routes({ children }: Props) {
           {stack.trashs.map(({ level, path }) => `${level}:${path}`).join(", ")}
         </p>
       </StackInfo>
-      <StackLayer stacks={stacks} routes={routes}/>
+      <StackLayer stacks={stacks} routes={routes} />
     </React.Fragment>
   );
 }
@@ -97,7 +94,13 @@ const StackInfo = styled.span`
   z-index: 100;
 `;
 
-const StackLayer = React.memo(function ({ stacks, routes }: { stacks: StackNode[]; routes: any[]}) {
+const StackLayer = React.memo(function ({
+  stacks,
+  routes,
+}: {
+  stacks: StackNode[];
+  routes: any[];
+}) {
   const stack = useStack();
   return (
     <>
@@ -122,4 +125,5 @@ const StackLayer = React.memo(function ({ stacks, routes }: { stacks: StackNode[
         );
       })}
     </>
-)})
+  );
+});
