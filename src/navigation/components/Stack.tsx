@@ -2,9 +2,7 @@ import React from "react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { animated, useSpring } from "@react-spring/web";
-import { useDevLog } from "./DevLog";
 import { useRouterContext } from "..";
-import { useStack } from "../contexts/stackContext";
 
 interface Props {
   children: React.ReactNode;
@@ -31,6 +29,7 @@ const slideIn = {
   },
   to: {
     transform: "translateX(0%)",
+    opacity: 1,
   },
 };
 
@@ -75,21 +74,18 @@ export default React.memo(function Stack({
   const [animation, setAnimation] = React.useState<Record<string, any>>({});
   const [noAnimatedX, setNoAnimatedX] = React.useState<string | null>(null);
   const focusShadowValue = React.useRef(true);
-  const stack = useStack();
-  const { setLog } = useDevLog();
   const { gestureData } = useRouterContext();
   console.log(
     `= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`
   );
-  // setLog("skip " + skipAnimation + " level " + level);
   const skipAnimation = gestureData.isBack || gestureData.isForward;
+  console.log("path skipAnimation", skipAnimation);
 
   React.useEffect(() => {
     if (skipAnimation) {
       setAnimation(fixed);
       setNoAnimatedX(null);
     } else {
-      // setLog("ani");
       setAnimation(slideIn);
       setNoAnimatedX(null);
     }
@@ -105,12 +101,6 @@ export default React.memo(function Stack({
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
-    // if (skipAnimation) {
-    //   // setAnimation(flashIn);
-    //   setAnimation(slideIn);
-    //   setNoAnimatedX("translateX(0%) !important");
-    //   return;
-    // }
     if (isPopped) {
       console.log(`** ${path}: 2`);
       console.log("isPopped", path);
@@ -142,23 +132,6 @@ export default React.memo(function Stack({
       return setAnimation(fadeIn);
     }
   }, [isFocusing, isPopped, skipAnimation]);
-
-  // React.useEffect(() => {
-  //   console.log("isPopped", isPopped);
-  //   console.log("skipAnimation", skipAnimation);
-  //   if (isPopped && skipAnimation) {
-  //     setAnimation(slideOut);
-  //     setNoAnimatedX("translateX(100%) !important");
-  //   } else if (skipAnimation) {
-  //     // setAnimation(flashIn);
-  //     setAnimation(slideIn);
-  //     // setNoAnimatedX("translateX(0%) !important");
-  //   } else if (isPopped) {
-  //     console.log("isPopped", path);
-  //     setAnimation(slideOut);
-  //     setNoAnimatedX(null);
-  //   }
-  // }, [isPopped, skipAnimation]);
 
   React.useEffect(() => {
     console.log(`focusing ${path} : ${isFocusing}, skip: ${skipAnimation}`);
