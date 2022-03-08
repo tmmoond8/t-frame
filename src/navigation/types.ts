@@ -14,5 +14,7 @@ export interface GestureData {
   timers: {
     gestureBack: ReturnType<typeof setTimeout>;
     gestureForward: ReturnType<typeof setTimeout>;
-  }
+  };
 }
+
+export type Pratform = "Cupertino" | "Android" | "Web";

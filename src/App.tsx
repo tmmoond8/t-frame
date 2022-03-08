@@ -1,10 +1,11 @@
 import React from "react";
-import { Route, BrowserRouter, Routes, useHistory } from "./navigation";
+import { Route, BrowserRouter, Routes } from "./navigation";
 import * as Pages from "./pages";
 
 function App() {
   return (
     <BrowserRouter
+      pratform="Android"
       screenOptions={{
         headerStyle: {
           backgroundColor: "#f4511e",
