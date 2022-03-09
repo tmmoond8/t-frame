@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useHistory } from "../contexts/historyContext";
 import { useStack } from "../contexts/stackContext";
+import { useFocusEffect } from "../contexts/stackContext";
 
 const HEADER_EVENTS = "T-FRAME-HEADER";
 
@@ -111,7 +112,22 @@ export function useHeader() {
     );
   };
 
+  const useRightMenus = (renderRightMenus: React.FC) => {
+    useFocusEffect(() => {
+      setOption({
+        rightMenus: renderRightMenus,
+      });
+
+      return () => {
+        setOption({
+          rightMenus: null,
+        });
+      };
+    });
+  };
+
   return {
     setOption,
+    useRightMenus,
   };
 }

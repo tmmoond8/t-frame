@@ -1,24 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { useFocusEffect, useHistory, useHeader } from "../navigation";
+import { useHistory, useHeader } from "../navigation";
 
 export default function HomePage() {
   const { history } = useHistory();
-  const { setOption } = useHeader();
-
-  useFocusEffect(() => {
-    setOption({
-      rightMenus: () => (
-        <button onClick={() => history.push("/editor")}>✏️</button>
-      ),
-    });
-
-    return () => {
-      setOption({
-        rightMenus: null,
-      });
-    };
-  });
+  const { useRightMenus } = useHeader();
+  useRightMenus(() => (
+    <button onClick={() => history.push("/editor")}>✏️</button>
+  ));
 
   const { data } = useFetch();
   return (
