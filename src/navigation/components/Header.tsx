@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Box, Flex } from "@chakra-ui/react";
 import { useHistory } from "../contexts/historyContext";
 import { useStack } from "../contexts/stackContext";
 import { useFocusEffect } from "../contexts/stackContext";
@@ -25,11 +26,10 @@ export default function Header({ screenOptions }: Props) {
   const [rightMenu, setRightMenu] = React.useState<React.ReactNode | null>(
     null
   );
+  const [hidden, setHidden] = React.useState(false);
 
   const stack = useStack();
   const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
-
-  console.log("header stack size", stack.size);
 
   React.useEffect(() => {
     const eventHandler = (e: CustomEvent<any>) => {
@@ -42,6 +42,9 @@ export default function Header({ screenOptions }: Props) {
       if (e.detail.rightMenus !== undefined) {
         setRightMenu(e.detail.rightMenus);
       }
+      if (e.detail.hidden !== undefined) {
+        setHidden(e.detail.hidden);
+      }
     };
     (window as any).addEventListener(HEADER_EVENTS, eventHandler);
     return () => {
@@ -50,21 +53,25 @@ export default function Header({ screenOptions }: Props) {
   }, []);
 
   return (
-    <StyledHeader style={headerStyle}>
-      <HeaderSide>
-        <Link show={showBack} />
-      </HeaderSide>
-      <Title
-        style={titleStyle}
-        onClick={() => {
-          console.info(stack.all.map(({ path }) => path));
-          console.info(stack.current, stack.prev);
-        }}
-      >
-        {title}
-      </Title>
-      <HeaderSide>{rightMenu}</HeaderSide>
-    </StyledHeader>
+    <>
+      {!hidden && (
+        <StyledHeader style={headerStyle}>
+          <Box>
+            <Link show={showBack} />
+          </Box>
+          <Title
+            style={titleStyle}
+            onClick={() => {
+              console.info(stack.all.map(({ path }) => path));
+              console.info(stack.current, stack.prev);
+            }}
+          >
+            {title}
+          </Title>
+          <Flex justifyContent="flex-end">{rightMenu}</Flex>
+        </StyledHeader>
+      )}
+    </>
   );
 }
 
@@ -75,6 +82,7 @@ const StyledHeader = styled.header`
   height: 56px;
   width: 100%;
   background-color: white;
+  padding: 16px;
   z-index: 100;
 `;
 
@@ -86,30 +94,44 @@ const Title = styled.h1`
 function Link({ show }: { show: boolean }) {
   const { history } = useHistory();
   return (
-    <button
-      style={{ visibility: show ? "visible" : "hidden" }}
+    <Box
+      as="button"
+      visibility={show ? "visible" : "hidden"}
+      fontSize="24px"
+      fontWeight="800"
       onClick={() => history.pop()}
     >
       ←
-    </button>
+    </Box>
   );
 }
-
-const HeaderSide = styled.div`
-  width: 100px;
-`;
 
 export function useHeader() {
   const setOption = (options: {
     title?: string;
     useBackButton?: boolean;
     rightMenus?: React.ReactNode;
+    hidden?: boolean;
   }) => {
     window.dispatchEvent(
       new CustomEvent(HEADER_EVENTS, {
         detail: options,
       })
     );
+  };
+
+  const useHiddenHeader = () => {
+    useFocusEffect(() => {
+      setOption({
+        hidden: true,
+      });
+
+      return () => {
+        setOption({
+          hidden: false,
+        });
+      };
+    });
   };
 
   const useRightMenus = (renderRightMenus: React.FC) => {
@@ -129,5 +151,6 @@ export function useHeader() {
   return {
     setOption,
     useRightMenus,
+    useHiddenHeader,
   };
 }

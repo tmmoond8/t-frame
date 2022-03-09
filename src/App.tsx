@@ -7,10 +7,8 @@ function App() {
     <BrowserRouter
       pratform="Android"
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#f4511e",
-        },
-        headerTintColor: "#fff",
+        headerStyle: {},
+        headerTintColor: "transparent",
         headerTitleStyle: {
           fontWeight: "bold",
         },

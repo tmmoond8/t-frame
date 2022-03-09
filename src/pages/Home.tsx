@@ -9,7 +9,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function HomePage() {
   const { history } = useHistory();
-  const { useRightMenus } = useHeader();
+  const { useHiddenHeader } = useHeader();
   const { data } = useSWR<{
     collections: {
       id: number;
@@ -17,9 +17,7 @@ export default function HomePage() {
       poster_urls: string[];
     }[];
   }>("/api/getCollections.json", fetcher);
-  useRightMenus(() => (
-    <button onClick={() => history.push("/editor")}>✏️</button>
-  ));
+  useHiddenHeader();
 
   return (
     <Layout.Page px="16px">

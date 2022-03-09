@@ -13,12 +13,16 @@ import {
 } from "@chakra-ui/react";
 import { IoIosStar, IoIosAdd, IoIosEye } from "react-icons/io";
 import { FaPencilAlt, FaEllipsisH } from "react-icons/fa";
+import { BsFillShareFill } from "react-icons/bs";
 import Layout from "../components/Layout";
+import { useHeader } from "../navigation";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function DetailPage() {
+  const { useRightMenus } = useHeader();
   const { data } = useSWR<Detail>("/api/getDetail.json", fetcher);
+  useRightMenus(() => <BsFillShareFill size="18px" />);
 
   return (
     <Layout.Page px="16px">
