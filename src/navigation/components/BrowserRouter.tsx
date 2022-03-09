@@ -47,6 +47,7 @@ const Layout = styled.div`
   bottom: 0;
   margin: auto;
   background: rgba(200, 200, 200, 0.5);
+  user-select: none;
 `;
 
 const Main = styled.main`

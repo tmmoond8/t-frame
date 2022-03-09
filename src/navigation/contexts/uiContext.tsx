@@ -3,6 +3,7 @@ import type { Pratform } from "../types";
 
 interface UiContextValues {
   pratform: Pratform;
+  changePratform: (pratform: Pratform) => void;
 }
 
 const UiContext = React.createContext<UiContextValues>(null!);
@@ -17,8 +18,13 @@ export const UiContextProvider = ({ children, pratform: _pratform }: Props) => {
   React.useEffect(() => {
     setPratform(_pratform);
   }, [_pratform]);
+  const changePratform = React.useCallback((pratform: Pratform) => {
+    setPratform(pratform);
+  }, []);
   return (
-    <UiContext.Provider value={{ pratform }}>{children}</UiContext.Provider>
+    <UiContext.Provider value={{ pratform, changePratform }}>
+      {children}
+    </UiContext.Provider>
   );
 };
 

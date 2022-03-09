@@ -95,7 +95,7 @@ const Android: StackAnimation = {
   fadeIn: {
     from: {
       transform: "translateY(-10%)",
-      opacity: 0.6,
+      opacity: 0.8,
     },
     to: {
       transform: "translateY(0%)",
