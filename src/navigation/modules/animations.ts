@@ -1,12 +1,13 @@
+import type { UseSpringProps, SpringConfig } from "@react-spring/web";
 import type { Pratform } from "../types";
 
 interface StackAnimation {
-  fixed: any;
-  slideIn: any;
-  slideOut: any;
-  fadeIn: any;
-  fadeOut: any;
-  config: any;
+  fixed: UseSpringProps;
+  slideIn: UseSpringProps;
+  slideOut: UseSpringProps;
+  fadeIn: UseSpringProps;
+  fadeOut: UseSpringProps;
+  config: SpringConfig;
 }
 
 const Cupertino: StackAnimation = {

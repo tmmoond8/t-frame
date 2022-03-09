@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { animated, useSpring } from "@react-spring/web";
+import { UseSpringProps, animated, useSpring } from "@react-spring/web";
 import { useRouterContext } from "..";
 import { useUiContext } from "../contexts/uiContext";
 import animations from "../modules/animations";
@@ -24,7 +24,7 @@ export default React.memo(function Stack({
   path,
   level,
 }: Props) {
-  const [animation, setAnimation] = React.useState<Record<string, any>>({});
+  const [animation, setAnimation] = React.useState<UseSpringProps>({}!);
   const [noAnimatedX, setNoAnimatedX] = React.useState<string | null>(null);
   const focusShadowValue = React.useRef(true);
   const { gestureData } = useRouterContext();
