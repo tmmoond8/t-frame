@@ -6,11 +6,54 @@ interface Props {
 }
 
 export default function Tabs({ children }: Props) {
-  return <StyledTab>{children}</StyledTab>;
+  const childrenType = toString.call(children);
+  const routes = React.useMemo(() => {
+    return childrenType === "[object Array]" ? (children as any[]) : [children];
+  }, [childrenType, children]);
+
+  const [currentTab, setCurrentTab] = React.useState(
+    routes.length === 0 ? null : routes[0].props.name
+  );
+  const route = routes.find(({ props }) => currentTab === props.name);
+  console.log("route", route);
+  console.log("currentTab", currentTab);
+  return (
+    <StyledTab>
+      {route?.props.children}
+      <TabButtons>
+        {routes.map(({ props }) => (
+          <TabButton
+            key={props.name}
+            onClick={() => {
+              setCurrentTab(props.name);
+            }}
+          >
+            {props.name}
+          </TabButton>
+        ))}
+      </TabButtons>
+    </StyledTab>
+  );
 }
 
 const StyledTab = styled.ol`
+  display: flex;
+  flex-direction: column;
   position: relative;
   height: 100%;
   width: 100%;
+`;
+
+const TabButtons = styled.ol`
+  display: flex;
+  height: 56px;
+  width: 100%;
+`;
+
+const TabButton = styled.li`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
