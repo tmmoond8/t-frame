@@ -121,6 +121,11 @@ export function useHeader() {
   };
 
   const useHiddenHeader = () => {
+    const stack = useStack();
+    React.useEffect(() => {
+      stack.current.useHeader = false;
+    }, []);
+
     useFocusEffect(() => {
       setOption({
         hidden: true,

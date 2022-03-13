@@ -14,6 +14,7 @@ interface Props {
   isPopped: boolean;
   level: number;
   skipAnimation?: boolean;
+  useHeader: boolean;
 }
 
 export default React.memo(function Stack({
@@ -21,6 +22,7 @@ export default React.memo(function Stack({
   stackId,
   isFocusing = true,
   isPopped,
+  useHeader,
   path,
   level,
 }: Props) {
@@ -113,6 +115,7 @@ export default React.memo(function Stack({
       style={animationStyle}
       level={hidden ? -1 : level}
       noAnimatedX={noAnimatedX}
+      useHeader={useHeader}
     >
       {children}
       <PageInfo>
@@ -125,8 +128,9 @@ export default React.memo(function Stack({
 const Animated = styled(animated.div)<{
   level: number;
   noAnimatedX: string | null;
+  useHeader: boolean;
 }>`
-  position: absolute;
+  position: ${(p) => (p.useHeader ? "absolute" : "fixed")};
   left: 0;
   top: 0;
   width: 100%;

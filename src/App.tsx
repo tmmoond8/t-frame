@@ -5,7 +5,7 @@ import * as Pages from "./pages";
 function App() {
   return (
     <BrowserRouter
-      pratform="Android"
+      pratform="Cupertino"
       screenOptions={{
         headerStyle: {},
         headerTintColor: "transparent",

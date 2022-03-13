@@ -104,7 +104,7 @@ const StackLayer = React.memo(function ({
   const stack = useStack();
   return (
     <>
-      {stacks.map(({ id, level, path }) => {
+      {stacks.map(({ id, level, path, useHeader }) => {
         const targetElement = (routes as React.ReactElement[]).find(
           (route) => route?.props?.path === path
         );
@@ -119,6 +119,7 @@ const StackLayer = React.memo(function ({
             isFocusing={isFocusing}
             path={path}
             isPopped={stack.trashs.some((trash) => trash.id === id)}
+            useHeader={useHeader}
           >
             <Page />
           </Stack>

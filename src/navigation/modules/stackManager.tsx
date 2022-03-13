@@ -2,6 +2,7 @@ export interface StackNode {
   id: string;
   level: number;
   path: string;
+  useHeader: boolean;
 }
 
 const genID = () => (Math.random() * 123).toString(32).split(".")[1];
@@ -27,6 +28,7 @@ export class StackManager {
         id: genID(),
         level: 0,
         path: window.location.pathname,
+        useHeader: true,
       },
     ];
   }
@@ -67,6 +69,7 @@ export class StackManager {
       id: genID(),
       level: nextLevel,
       path,
+      useHeader: true,
     });
     this._trashs = Object.entries(this._trashs).reduce(
       (acc, [level, stack]) => {
