@@ -27,7 +27,7 @@ export default function BrowserRouter({
       <StackContextProvider>
         <Router>
           <Layout>
-            <DevLog />
+            {/* <DevLog /> */}
             {screenOptions && <Header screenOptions={screenOptions} />}
             <Main>{children}</Main>
           </Layout>

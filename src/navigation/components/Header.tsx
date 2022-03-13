@@ -26,7 +26,6 @@ export default function Header({ screenOptions }: Props) {
   const [rightMenu, setRightMenu] = React.useState<React.ReactNode | null>(
     null
   );
-  const [hidden, setHidden] = React.useState(false);
 
   const stack = useStack();
   const titleStyle = { ...headerTitleStyle, color: headerTintColor ?? "black" };
@@ -42,9 +41,6 @@ export default function Header({ screenOptions }: Props) {
       if (e.detail.rightMenus !== undefined) {
         setRightMenu(e.detail.rightMenus);
       }
-      if (e.detail.hidden !== undefined) {
-        setHidden(e.detail.hidden);
-      }
     };
     (window as any).addEventListener(HEADER_EVENTS, eventHandler);
     return () => {
@@ -54,7 +50,7 @@ export default function Header({ screenOptions }: Props) {
 
   return (
     <>
-      {!hidden && (
+      {!stack.current.noHeader && (
         <StyledHeader style={headerStyle}>
           <Box>
             <Link show={showBack} />
@@ -79,6 +75,9 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 56px;
   width: 100%;
   background-color: white;
@@ -111,32 +110,12 @@ export function useHeader() {
     title?: string;
     useBackButton?: boolean;
     rightMenus?: React.ReactNode;
-    hidden?: boolean;
   }) => {
     window.dispatchEvent(
       new CustomEvent(HEADER_EVENTS, {
         detail: options,
       })
     );
-  };
-
-  const useHiddenHeader = () => {
-    const stack = useStack();
-    React.useEffect(() => {
-      stack.current.useHeader = false;
-    }, []);
-
-    useFocusEffect(() => {
-      setOption({
-        hidden: true,
-      });
-
-      return () => {
-        setOption({
-          hidden: false,
-        });
-      };
-    });
   };
 
   const useRightMenus = (renderRightMenus: React.FC) => {
@@ -156,6 +135,5 @@ export function useHeader() {
   return {
     setOption,
     useRightMenus,
-    useHiddenHeader,
   };
 }

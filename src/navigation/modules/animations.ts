@@ -75,7 +75,7 @@ const Android: StackAnimation = {
   },
   slideIn: {
     from: {
-      transform: "translateY(30%)",
+      transform: "translateY(20%)",
       opacity: 0.5,
     },
     to: {
@@ -89,7 +89,7 @@ const Android: StackAnimation = {
       opacity: 1,
     },
     to: {
-      transform: "translateY(30%)",
+      transform: "translateY(20%)",
       opacity: 0.5,
     },
   },

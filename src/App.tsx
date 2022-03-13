@@ -15,7 +15,7 @@ function App() {
       }}
     >
       <Routes>
-        <Route path="/" title="Home" component={Pages.Home} />
+        <Route path="/" title="Home" component={Pages.Home} noHeader />
         <Route path="/detail" title="Detail" component={Pages.Detail} />
         <Route path="/editor" title="Editor" component={Pages.Editor} />
       </Routes>

@@ -5,6 +5,7 @@ interface Props {
   title: string;
   component: React.FC;
   rightMenus?: React.FC;
+  noHeader?: boolean;
 }
 
 export default function Route(_: Props) {
