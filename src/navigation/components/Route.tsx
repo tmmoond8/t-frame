@@ -10,6 +10,5 @@ interface Props {
 
 export default function Route(_: Props) {
   // 실제로 그리는 것은 Routes
-
   return null;
 }
