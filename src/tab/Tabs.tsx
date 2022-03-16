@@ -15,8 +15,6 @@ export default function Tabs({ children }: Props) {
     routes.length === 0 ? null : routes[0].props.name
   );
   const route = routes.find(({ props }) => currentTab === props.name);
-  console.log("route", route);
-  console.log("currentTab", currentTab);
   return (
     <StyledTab>
       {route?.props.children}

@@ -32,6 +32,7 @@ export default function Routes({ children }: Props) {
     const targetElement = (routes as React.ReactElement[]).find(
       (route) => route.props.path === current.path
     );
+    current.noHeader = targetElement!.props.noHeader;
 
     setOption({
       title: targetElement!.props.title,
