@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Spacer } from "@chakra-ui/react";
+import { Text, Spacer, Box } from "@chakra-ui/react";
 import useSWR from "swr";
 import { Tabs, Tab } from "../../tab";
 import Row from "../../components/Row";
@@ -69,6 +69,7 @@ export default function HomePage() {
               poster_url: award.posters[0],
             }))}
           />
+          <Box minH="44px" />
         </Layout.Page>
       </Tab>
       <Tab name="검색">
