@@ -17,7 +17,7 @@ export default function Tabs({ children }: Props) {
   const route = routes.find(({ props }) => currentTab === props.name);
   return (
     <StyledTab>
-      {route?.props.children}
+      <Body>{route?.props.children}</Body>
       <TabButtons>
         {routes.map(({ props }) => (
           <TabButton
@@ -40,6 +40,12 @@ const StyledTab = styled.ol`
   position: relative;
   height: 100%;
   width: 100%;
+`;
+
+const Body = styled.main`
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const TabButtons = styled.ol`

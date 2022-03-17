@@ -27,6 +27,13 @@ export default function HomePage() {
       };
     }[];
   }>("/api/getRankings.json", fetcher);
+  const { data: awardData } = useSWR<{
+    awards: {
+      staffmade_id: number;
+      title: string;
+      posters: string[];
+    }[];
+  }>("/api/getAwards.json", fetcher);
 
   return (
     <Tabs>
@@ -51,6 +58,15 @@ export default function HomePage() {
               ),
               name: ranking.content.title,
               poster_url: ranking.content.poster.medium,
+            }))}
+          />
+          <Spacer maxH="24px" />
+          <Row
+            title="수상작"
+            data={awardData?.awards.map((award) => ({
+              id: award.staffmade_id,
+              name: award.title,
+              poster_url: award.posters[0],
             }))}
           />
         </Layout.Page>
