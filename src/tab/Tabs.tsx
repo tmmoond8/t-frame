@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
@@ -7,6 +8,7 @@ interface Props {
 
 export default function Tabs({ children }: Props) {
   const childrenType = toString.call(children);
+  const tabIndex = React.useRef(0);
   const routes = React.useMemo(() => {
     return childrenType === "[object Array]" ? (children as any[]) : [children];
   }, [childrenType, children]);
@@ -16,17 +18,20 @@ export default function Tabs({ children }: Props) {
   );
   const route = routes.find(({ props }) => currentTab === props.name);
   const Component = route?.props.component;
+  console.log("routes.count", routes.length);
   return (
     <StyledTab>
       <Body>
         <Component />
       </Body>
-      <TabButtons>
-        {routes.map(({ props }) => (
+      <TabButtons currentIndex={tabIndex.current} count={routes.length}>
+        {routes.map(({ props }, index) => (
           <TabButton
+            isSelected={index === tabIndex.current}
             key={props.name}
             onClick={() => {
               setCurrentTab(props.name);
+              tabIndex.current = index;
             }}
           >
             {props.name}
@@ -51,16 +56,35 @@ const Body = styled.main`
   overflow-x: hidden;
 `;
 
-const TabButtons = styled.ol`
+const TabButtons = styled.ol<{ currentIndex: number; count: number }>`
   display: flex;
   height: 56px;
   width: 100%;
+  position: relative;
+  box-shadow: 0 -1px #ddd;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: calc(100% / ${(p) => p.count});
+    left: calc((100% / ${(p) => p.count}) * ${(p) => p.currentIndex});
+    transition: left 0.2s ease-out;
+    height: 2px;
+    background-color: black;
+  }
 `;
 
-const TabButton = styled.li`
+const TabButton = styled.li<{ isSelected: boolean }>`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: #999;
+
+  ${(p) =>
+    p.isSelected &&
+    css`
+      color: black;
+    `}
 `;
