@@ -1,10 +1,10 @@
 import React from "react";
 
 interface Props {
-  children: React.ReactNode;
+  component: React.FC;
   name: string;
 }
 
-export default function Tab({ children }: Props) {
-  return <li>{children}</li>;
+export default function Tab(_: Props) {
+  return null;
 }
