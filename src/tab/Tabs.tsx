@@ -18,7 +18,6 @@ export default function Tabs({ children }: Props) {
   );
   const route = routes.find(({ props }) => currentTab === props.name);
   const Component = route?.props.component;
-  console.log("routes.count", routes.length);
   return (
     <StyledTab>
       <Body>
@@ -34,6 +33,7 @@ export default function Tabs({ children }: Props) {
               tabIndex.current = index;
             }}
           >
+            {props.icon && <Icon>{props.icon}</Icon>}
             {props.name}
           </TabButton>
         ))}
@@ -87,4 +87,8 @@ const TabButton = styled.li<{ isSelected: boolean }>`
     css`
       color: black;
     `}
+`;
+
+const Icon = styled.span`
+  margin-right: 8px;
 `;
