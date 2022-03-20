@@ -9,6 +9,7 @@ interface Props {
 export default function Tabs({ children }: Props) {
   const childrenType = toString.call(children);
   const tabIndex = React.useRef(0);
+  const activatedTabs = React.useRef<Set<string>>(new Set());
   const routes = React.useMemo(() => {
     return childrenType === "[object Array]" ? (children as any[]) : [children];
   }, [childrenType, children]);
@@ -16,12 +17,22 @@ export default function Tabs({ children }: Props) {
   const [currentTab, setCurrentTab] = React.useState(
     routes.length === 0 ? null : routes[0].props.name
   );
-  const route = routes.find(({ props }) => currentTab === props.name);
-  const Component = route?.props.component;
+
+  activatedTabs.current.add(currentTab);
+
   return (
     <StyledTab>
       <Body>
-        <Component />
+        {routes
+          .filter(({ props }) => activatedTabs.current.has(props.name))
+          .map(({ props }) => {
+            const Component = props.component;
+            return (
+              <TabWraper isCurrentTab={props.name === currentTab}>
+                <Component />
+              </TabWraper>
+            );
+          })}
       </Body>
       <TabButtons currentIndex={tabIndex.current} count={routes.length}>
         {routes.map(({ props }, index) => (
@@ -50,7 +61,20 @@ const StyledTab = styled.ol`
   width: 100%;
 `;
 
+const TabWraper = styled.section<{ isCurrentTab: boolean }>`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  ${(p) =>
+    p.isCurrentTab &&
+    css`
+      z-index: 10;
+    `}
+`;
+
 const Body = styled.main`
+  position: relative;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -81,6 +105,9 @@ const TabButton = styled.li<{ isSelected: boolean }>`
   justify-content: center;
   cursor: pointer;
   color: #999;
+  &:hover {
+    background-color: #eee;
+  }
 
   ${(p) =>
     p.isSelected &&
