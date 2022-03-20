@@ -67,6 +67,8 @@ const TabWraper = styled.section<{ isCurrentTab: boolean }>`
   height: 100%;
   background-color: white;
   transition: opacity 0.3s ease-in-out;
+  overflow-x: hidden;
+  overflow-y: auto;
   ${(p) =>
     p.isCurrentTab
       ? css`
@@ -84,8 +86,7 @@ const TabWraper = styled.section<{ isCurrentTab: boolean }>`
 const Body = styled.main`
   position: relative;
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 `;
 
 const TabButtons = styled.ol<{ currentIndex: number; count: number }>`
