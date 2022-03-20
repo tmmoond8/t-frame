@@ -5,7 +5,19 @@ export default function MyWatcha() {
   return (
     <Layout.Page px="16px">
       <Text fontSize={22} fontWeight={700}>
-        MyWatcha
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
+        <p>MyWatcha</p>
       </Text>
     </Layout.Page>
   );

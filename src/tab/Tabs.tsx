@@ -66,11 +66,19 @@ const TabWraper = styled.section<{ isCurrentTab: boolean }>`
   width: 100%;
   height: 100%;
   background-color: white;
+  transition: opacity 0.3s ease-in-out;
   ${(p) =>
-    p.isCurrentTab &&
-    css`
-      z-index: 10;
-    `}
+    p.isCurrentTab
+      ? css`
+          z-index: 10;
+          opacity: 1;
+          visibility: visible;
+        `
+      : css`
+          z-index: 0;
+          opacity: 0.4;
+          visibility: hidden;
+        `}
 `;
 
 const Body = styled.main`
