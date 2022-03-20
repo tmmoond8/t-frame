@@ -12,7 +12,7 @@ interface StackAnimation {
 
 const Cupertino: StackAnimation = {
   config: {
-    duration: 300,
+    duration: 200,
   },
   fixed: {
     from: {
@@ -63,7 +63,7 @@ const Cupertino: StackAnimation = {
 
 const Android: StackAnimation = {
   config: {
-    duration: 250,
+    duration: 200,
   },
   fixed: {
     from: {
