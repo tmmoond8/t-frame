@@ -32,12 +32,19 @@ export default React.memo(function Stack({
   const { gestureData } = useRouterContext();
   const { pratform } = useUiContext();
   const [hidden, setHidden] = React.useState(true);
+  const skipAnimationRef = React.useRef(false);
   console.log("pratform", pratform);
   const pratformAnimation = animations[pratform];
   console.log(
     `= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`
   );
   const skipAnimation = gestureData.isBack || gestureData.isForward;
+  if (skipAnimation) {
+    skipAnimationRef.current = true;
+    setTimeout(() => {
+      skipAnimationRef.current = false;
+    }, 300);
+  }
 
   React.useEffect(() => {
     if (skipAnimation) {
@@ -52,40 +59,31 @@ export default React.memo(function Stack({
   React.useEffect(() => {
     const focus = focusShadowValue.current;
     focusShadowValue.current = isFocusing;
-    console.log("skipAnimation", skipAnimation);
-    if (skipAnimation && isPopped) {
-      console.log(`** ${path}: 1`);
+    if (skipAnimationRef.current && isPopped) {
       setAnimation(pratformAnimation.slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
     if (isPopped) {
-      console.log(`** ${path}: 2`);
-      console.log("isPopped", path);
       setAnimation(pratformAnimation.slideOut);
       setNoAnimatedX(null);
       return;
     }
     if (skipAnimation && !isFocusing) {
-      console.log(`** ${path}: 3`);
       setAnimation(pratformAnimation.slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
     if (skipAnimation && isFocusing) {
-      console.log(`** ${path}: 4`);
       setAnimation(pratformAnimation.slideIn);
       setNoAnimatedX("translateX(0%) !important");
       return;
     }
     if (!isFocusing) {
-      console.log(`** ${path}: 5`);
       setNoAnimatedX(null);
       return setAnimation(pratformAnimation.fadeOut);
     }
-
     if (focus === false && isFocusing) {
-      console.log(`** ${path}: 6`);
       setNoAnimatedX(null);
       return setAnimation(pratformAnimation.fadeIn);
     }

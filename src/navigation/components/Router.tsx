@@ -50,8 +50,10 @@ export default function Router({ children }: Props) {
       console.log("path", path);
 
       handleBackGesture(gestureData.current, stack?.prev?.path);
-      handleForwardGesture(gestureData.current, stack.findTrash(stack.size)?.path);
-
+      handleForwardGesture(
+        gestureData.current,
+        stack.findTrash(stack.size)?.path
+      );
       console.log("popstate", {
         xS: gestureData.current.start.x,
         xE: gestureData.current.end.x,
