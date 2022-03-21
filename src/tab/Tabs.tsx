@@ -21,22 +21,30 @@ export default function Tabs({ children }: Props) {
   activatedTabs.current.add(currentTab);
 
   return (
-    <StyledTab>
-      <Body>
+    <StyledTabs>
+      <Body className="TabContent">
         {routes
           .filter(({ props }) => activatedTabs.current.has(props.name))
           .map(({ props }) => {
             const Component = props.component;
             return (
-              <TabWraper isCurrentTab={props.name === currentTab}>
+              <TabWraper
+                className="TabPageWrapper"
+                isCurrentTab={props.name === currentTab}
+              >
                 <Component />
               </TabWraper>
             );
           })}
       </Body>
-      <TabButtons currentIndex={tabIndex.current} count={routes.length}>
+      <TabButtons
+        className="TabButtons"
+        currentIndex={tabIndex.current}
+        count={routes.length}
+      >
         {routes.map(({ props }, index) => (
           <TabButton
+            className="TabButton"
             isSelected={index === tabIndex.current}
             key={props.name}
             onClick={() => {
@@ -44,16 +52,16 @@ export default function Tabs({ children }: Props) {
               tabIndex.current = index;
             }}
           >
-            {props.icon && <Icon>{props.icon}</Icon>}
-            {props.name}
+            {props.icon && <Icon className="TabIcon">{props.icon}</Icon>}
+            <TabLabel className="TabLabel">{props.name}</TabLabel>
           </TabButton>
         ))}
       </TabButtons>
-    </StyledTab>
+    </StyledTabs>
   );
 }
 
-const StyledTab = styled.ol`
+const StyledTabs = styled.ol`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -126,5 +134,7 @@ const TabButton = styled.li<{ isSelected: boolean }>`
 `;
 
 const Icon = styled.span`
-  margin-right: 8px;
+  padding: 8px;
 `;
+
+const TabLabel = styled.span``;
