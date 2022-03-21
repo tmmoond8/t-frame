@@ -110,6 +110,7 @@ export default React.memo(function Stack({
 
   return (
     <Animated
+      className={`Stack ${path.replace("/", "")}`}
       style={animationStyle}
       level={hidden ? -1 : level}
       noAnimatedX={noAnimatedX}

@@ -68,7 +68,7 @@ export default function Routes({ children }: Props) {
   }, [gestureData.isBack, gestureData.isForward]);
 
   return (
-    <React.Fragment>
+    <>
       <StackInfo>
         <p>
           current:
@@ -80,7 +80,7 @@ export default function Routes({ children }: Props) {
         </p>
       </StackInfo>
       <StackLayer stacks={stacks} routes={routes} />
-    </React.Fragment>
+    </>
   );
 }
 

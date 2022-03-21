@@ -26,10 +26,10 @@ export default function BrowserRouter({
     <UiContextProvider pratform={pratform}>
       <StackContextProvider>
         <Router>
-          <Layout>
+          <Layout className="AppLayout">
             {/* <DevLog /> */}
             {screenOptions && <Header screenOptions={screenOptions} />}
-            <Main>{children}</Main>
+            <Main className="AppMain">{children}</Main>
           </Layout>
         </Router>
       </StackContextProvider>

@@ -51,11 +51,12 @@ export default function Header({ screenOptions }: Props) {
   return (
     <>
       {!stack.current.noHeader && (
-        <StyledHeader style={headerStyle}>
-          <Box>
+        <StyledHeader className="Header" style={headerStyle}>
+          <Box className="HeaderLeft">
             <Link show={showBack} />
           </Box>
           <Title
+            className="HeaderTitle"
             style={titleStyle}
             onClick={() => {
               console.info(stack.all.map(({ path }) => path));
@@ -64,7 +65,9 @@ export default function Header({ screenOptions }: Props) {
           >
             {title}
           </Title>
-          <Flex justifyContent="flex-end">{rightMenu}</Flex>
+          <Flex className="HeaderRight" justifyContent="flex-end">
+            {rightMenu}
+          </Flex>
         </StyledHeader>
       )}
     </>
