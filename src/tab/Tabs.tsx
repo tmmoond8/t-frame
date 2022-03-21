@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
@@ -69,6 +69,15 @@ const StyledTabs = styled.ol`
   width: 100%;
 `;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const TabWraper = styled.section<{ isCurrentTab: boolean }>`
   position: absolute;
   width: 100%;
@@ -77,6 +86,7 @@ const TabWraper = styled.section<{ isCurrentTab: boolean }>`
   transition: opacity 0.3s ease-in-out;
   overflow-x: hidden;
   overflow-y: auto;
+  animation: ${fadeIn} 0.3s ease-in-out;
   ${(p) =>
     p.isCurrentTab
       ? css`
