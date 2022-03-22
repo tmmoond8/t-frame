@@ -84,15 +84,16 @@ export default function Routes({ children }: Props) {
   );
 }
 
-const StackInfo = styled.span`
+const StackInfo = styled.div`
   position: absolute;
   left: 0;
   bottom: 0;
-  opacity: 0.6;
+  opacity: 0.4;
   padding: 4px;
   background: #444;
   color: white;
   z-index: 100;
+  pointer-events: none;
 `;
 
 const StackLayer = React.memo(function ({

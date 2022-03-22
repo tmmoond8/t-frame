@@ -36,7 +36,7 @@ export function useGestureData() {
       gestureForward: setTimeout(() => {
         gestureData.current.isForward = false;
       }, 50),
-    }
+    },
   });
 
   return gestureData;
@@ -46,7 +46,6 @@ export function useTouchEvent(gestureData: GestureData) {
   const timer = React.useRef<ReturnType<typeof setTimeout>>();
   React.useEffect(() => {
     const touchStartEvent = (e: TouchEvent) => {
-      console.log("touch start");
       const { changedTouches } = e;
       gestureData.start = {
         x: changedTouches[0].clientX,
@@ -55,7 +54,6 @@ export function useTouchEvent(gestureData: GestureData) {
     };
 
     const touchMoveEvent = (e: TouchEvent) => {
-      console.log("touch end");
       const { changedTouches } = e;
       gestureData.end = {
         x: changedTouches[0].clientX,
@@ -110,7 +108,10 @@ export function useTouchEvent(gestureData: GestureData) {
   }, []);
 }
 
-export const handleBackGesture = (gestureData: GestureData, prevPath?: string) => {
+export const handleBackGesture = (
+  gestureData: GestureData,
+  prevPath?: string
+) => {
   if (
     isBackGesture({
       startX: gestureData.start.x,
@@ -125,12 +126,14 @@ export const handleBackGesture = (gestureData: GestureData, prevPath?: string) =
   }
   const isSafariGestureBack = gestureData.deltaX < 0;
   const path = window.history.state?.path ?? "/";
-  gestureData.isBack = 
-    (gestureData.gestureBack || isSafariGestureBack) && 
-    path === prevPath;
+  gestureData.isBack =
+    (gestureData.gestureBack || isSafariGestureBack) && path === prevPath;
 };
 
-export const handleForwardGesture = (gestureData: GestureData, forwardPath?: string) => {
+export const handleForwardGesture = (
+  gestureData: GestureData,
+  forwardPath?: string
+) => {
   if (
     isForwardGesture({
       startX: gestureData.start.x,

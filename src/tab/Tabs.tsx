@@ -4,9 +4,10 @@ import { css, keyframes } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
+  className?: string;
 }
 
-export default function Tabs({ children }: Props) {
+export default function Tabs({ children, className }: Props) {
   const childrenType = toString.call(children);
   const tabIndex = React.useRef(0);
   const activatedTabs = React.useRef<Set<string>>(new Set());
@@ -21,7 +22,7 @@ export default function Tabs({ children }: Props) {
   activatedTabs.current.add(currentTab);
 
   return (
-    <StyledTabs>
+    <StyledTabs className={className}>
       <Body className="TabContent">
         {routes
           .filter(({ props }) => activatedTabs.current.has(props.name))
@@ -132,7 +133,7 @@ const TabButton = styled.li<{ isSelected: boolean }>`
   justify-content: center;
   cursor: pointer;
   color: #999;
-  &:hover {
+  &:active {
     background-color: #eee;
   }
 
@@ -144,7 +145,7 @@ const TabButton = styled.li<{ isSelected: boolean }>`
 `;
 
 const Icon = styled.span`
-  padding: 8px;
+  padding: 0 8px;
 `;
 
 const TabLabel = styled.span``;
