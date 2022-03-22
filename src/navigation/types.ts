@@ -17,4 +17,4 @@ export interface GestureData {
   };
 }
 
-export type Pratform = "Cupertino" | "Android" | "Web";
+export type Platform = "Cupertino" | "Android" | "Web";

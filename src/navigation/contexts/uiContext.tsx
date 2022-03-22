@@ -1,31 +1,38 @@
 import React from "react";
-import type { Pratform } from "../types";
+import type { Platform } from "../types";
 
 interface UiContextValues {
-  pratform: Pratform;
-  changePratform: (pratform: Pratform) => void;
+  platform: Platform;
+  changePlatform: (platform: Platform) => void;
 }
 
 const UiContext = React.createContext<UiContextValues>(null!);
 
 interface Props {
   children: React.ReactNode;
-  pratform: Pratform;
+  defaultPlatform: Platform;
 }
 
-export const UiContextProvider = ({ children, pratform: _pratform }: Props) => {
-  const [pratform, setPratform] = React.useState<Pratform>("Cupertino");
+export const UiContextProvider = ({ children, defaultPlatform }: Props) => {
+  const [platform, setPlatform] = React.useState<Platform>("Cupertino");
   React.useEffect(() => {
-    setPratform(_pratform);
-  }, [_pratform]);
-  const changePratform = React.useCallback((pratform: Pratform) => {
-    setPratform(pratform);
+    setPlatform(defaultPlatform);
+  }, [defaultPlatform]);
+  const changePlatform = React.useCallback((platform: Platform) => {
+    setPlatform(platform);
   }, []);
+
   return (
-    <UiContext.Provider value={{ pratform, changePratform }}>
+    <UiContext.Provider value={{ platform, changePlatform }}>
       {children}
     </UiContext.Provider>
   );
 };
 
 export const useUiContext = () => React.useContext(UiContext);
+
+export const usePlatform = () => {
+  const { platform, changePlatform } = useUiContext();
+  console.log("platform", platform);
+  return {};
+};

@@ -1,5 +1,5 @@
 import type { UseSpringProps, SpringConfig } from "@react-spring/web";
-import type { Pratform } from "../types";
+import type { Platform } from "../types";
 
 interface StackAnimation {
   fixed: UseSpringProps;
@@ -164,4 +164,4 @@ export default {
   Cupertino,
   Android,
   Web,
-} as Record<Pratform, StackAnimation>;
+} as Record<Platform, StackAnimation>;

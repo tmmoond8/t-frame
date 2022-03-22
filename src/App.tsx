@@ -1,11 +1,12 @@
 import React from "react";
-import { Route, BrowserRouter, Routes } from "./navigation";
+import { Route, BrowserRouter, Routes, Platform } from "./navigation";
 import * as Pages from "./pages";
 
 function App() {
+  const platform = localStorage.getItem("AppPlatform") || "Cupertino";
   return (
     <BrowserRouter
-      pratform="Cupertino"
+      defaultPlatform={platform as Platform}
       screenOptions={{
         headerStyle: {},
         headerTintColor: "transparent",

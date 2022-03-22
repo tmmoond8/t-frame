@@ -31,11 +31,11 @@ export default React.memo(function Stack({
   const [noAnimatedX, setNoAnimatedX] = React.useState<string | null>(null);
   const focusShadowValue = React.useRef(true);
   const { gestureData } = useRouterContext();
-  const { pratform } = useUiContext();
+  const { platform } = useUiContext();
   const [hidden, setHidden] = React.useState(true);
   const skipAnimationRef = React.useRef(false);
-  console.log("pratform", pratform);
-  const pratformAnimation = animations[pratform];
+  console.log("platform", platform);
+  const platformAnimation = animations[platform];
   console.log(
     `= path: ${path}, isFocusing: ${isFocusing}, isPopped: ${isPopped}, level: ${level}, stackId: ${stackId} children: ${children}`
   );
@@ -49,10 +49,10 @@ export default React.memo(function Stack({
 
   React.useEffect(() => {
     if (skipAnimation) {
-      setAnimation(pratformAnimation.fixed);
+      setAnimation(platformAnimation.fixed);
       setNoAnimatedX(null);
     } else {
-      setAnimation(pratformAnimation.slideIn);
+      setAnimation(platformAnimation.slideIn);
       setNoAnimatedX(null);
     }
   }, []);
@@ -61,32 +61,32 @@ export default React.memo(function Stack({
     const focus = focusShadowValue.current;
     focusShadowValue.current = isFocusing;
     if (skipAnimationRef.current && isPopped) {
-      setAnimation(pratformAnimation.slideOut);
+      setAnimation(platformAnimation.slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
     if (isPopped) {
-      setAnimation(pratformAnimation.slideOut);
+      setAnimation(platformAnimation.slideOut);
       setNoAnimatedX(null);
       return;
     }
     if (skipAnimation && !isFocusing) {
-      setAnimation(pratformAnimation.slideOut);
+      setAnimation(platformAnimation.slideOut);
       setNoAnimatedX("translateX(100%) !important");
       return;
     }
     if (skipAnimation && isFocusing) {
-      setAnimation(pratformAnimation.slideIn);
+      setAnimation(platformAnimation.slideIn);
       setNoAnimatedX("translateX(0%) !important");
       return;
     }
     if (!isFocusing) {
       setNoAnimatedX(null);
-      return setAnimation(pratformAnimation.fadeOut);
+      return setAnimation(platformAnimation.fadeOut);
     }
     if (focus === false && isFocusing) {
       setNoAnimatedX(null);
-      return setAnimation(pratformAnimation.fadeIn);
+      return setAnimation(platformAnimation.fadeIn);
     }
   }, [isFocusing, isPopped, skipAnimation]);
 
@@ -98,7 +98,7 @@ export default React.memo(function Stack({
     if (!isFocusing) {
       setTimeout(() => {
         setHidden(true);
-      }, pratformAnimation.config.duration);
+      }, platformAnimation.config.duration);
     } else {
       setHidden(false);
     }
@@ -106,7 +106,7 @@ export default React.memo(function Stack({
 
   const animationStyle = useSpring({
     ...animation,
-    config: pratformAnimation.config,
+    config: platformAnimation.config,
   });
 
   return (

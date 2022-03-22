@@ -5,11 +5,11 @@ import { StackContextProvider } from "../contexts/stackContext";
 import { UiContextProvider } from "../contexts/uiContext";
 import Header from "./Header";
 import DevLog from "./DevLog";
-import type { Pratform } from "../types";
+import type { Platform } from "../types";
 
 interface Props {
   children: React.ReactNode;
-  pratform: Pratform;
+  defaultPlatform: Platform;
   screenOptions?: {
     headerStyle: React.CSSProperties;
     headerTintColor?: string;
@@ -20,10 +20,10 @@ interface Props {
 export default function BrowserRouter({
   children,
   screenOptions,
-  pratform,
+  defaultPlatform,
 }: Props) {
   return (
-    <UiContextProvider pratform={pratform}>
+    <UiContextProvider defaultPlatform={defaultPlatform}>
       <StackContextProvider>
         <Router>
           <Layout className="AppLayout">
