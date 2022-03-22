@@ -42,7 +42,7 @@ const Cupertino: StackAnimation = {
   fadeIn: {
     from: {
       transform: "translateX(-20%)",
-      opacity: 0.6,
+      opacity: 0.4,
     },
     to: {
       transform: "translateX(0%)",
@@ -56,7 +56,7 @@ const Cupertino: StackAnimation = {
     },
     to: {
       transform: "translateX(-20%)",
-      opacity: 0.6,
+      opacity: 0.4,
     },
   },
 };

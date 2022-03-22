@@ -53,4 +53,5 @@ const Layout = styled.div`
 const Main = styled.main`
   flex: 1;
   position: relative;
+  background-color: white;
 `;
