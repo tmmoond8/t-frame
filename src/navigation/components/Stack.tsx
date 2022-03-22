@@ -1,4 +1,5 @@
 import React from "react";
+import isPropValid from "@emotion/is-prop-valid";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { UseSpringProps, animated, useSpring } from "@react-spring/web";
@@ -124,7 +125,10 @@ export default React.memo(function Stack({
   );
 });
 
-const Animated = styled(animated.div)<{
+const Animated = styled(animated.div, {
+  shouldForwardProp: (p: string) =>
+    isPropValid(p) && !["level", "noAnimatedX", "noHeader"].includes(p),
+})<{
   level: number;
   noAnimatedX: string | null;
   noHeader: boolean;

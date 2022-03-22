@@ -54,8 +54,8 @@ export default function DetailPage() {
             <Center flexDir="column" py="20px" borderBottom="1px solid #ddd">
               <Text>Rate</Text>
               <HStack>
-                {Array.from({ length: 5 }).map(() => (
-                  <IoIosStar size={44} color="#eee" />
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <IoIosStar key={idx} size={44} color="#eee" />
                 ))}
               </HStack>
             </Center>

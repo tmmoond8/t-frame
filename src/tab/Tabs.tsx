@@ -30,6 +30,7 @@ export default function Tabs({ children, className }: Props) {
             const Component = props.component;
             return (
               <TabWraper
+                key={props.name}
                 className="TabPageWrapper"
                 isCurrentTab={props.name === currentTab}
               >
