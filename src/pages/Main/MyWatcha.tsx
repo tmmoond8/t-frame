@@ -1,13 +1,14 @@
 import React from "react";
 import { Text, RadioGroup, Stack, Radio } from "@chakra-ui/react";
-import {} from "../../navigation";
+import { usePlatform, Platform } from "../../navigation";
 import Layout from "../../components/Layout";
 
 export default function MyWatcha() {
   const platform = localStorage.getItem("AppPlatform") || "Cupertino";
-  const handleChangePlatform = (p: string) => {
+  const { changePlatform } = usePlatform();
+  const handleChangePlatform = (p: Platform) => {
+    changePlatform(p);
     localStorage.setItem("AppPlatform", p);
-    console.log("platform", p);
   };
   return (
     <Layout.Page px="16px">

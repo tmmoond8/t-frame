@@ -20,6 +20,7 @@ export const UiContextProvider = ({ children, defaultPlatform }: Props) => {
   }, [defaultPlatform]);
   const changePlatform = React.useCallback((platform: Platform) => {
     setPlatform(platform);
+    globalThis.location.reload();
   }, []);
 
   return (
@@ -33,6 +34,8 @@ export const useUiContext = () => React.useContext(UiContext);
 
 export const usePlatform = () => {
   const { platform, changePlatform } = useUiContext();
-  console.log("platform", platform);
-  return {};
+  return {
+    platform,
+    changePlatform,
+  };
 };
