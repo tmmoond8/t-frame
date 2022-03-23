@@ -63,7 +63,7 @@ const Cupertino: StackAnimation = {
 
 const Android: StackAnimation = {
   config: {
-    duration: 200,
+    duration: 150,
   },
   fixed: {
     from: {
@@ -90,7 +90,7 @@ const Android: StackAnimation = {
     },
     to: {
       transform: "translateY(20%)",
-      opacity: 0.5,
+      opacity: 0.2,
     },
   },
   fadeIn: {

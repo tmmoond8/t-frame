@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "@emotion/styled";
 import useSWR from "swr";
 import {
   Box,
@@ -10,6 +9,10 @@ import {
   Stack,
   Text,
   HStack,
+  List,
+  ListItem,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { IoIosStar, IoIosAdd, IoIosEye } from "react-icons/io";
 import { FaPencilAlt, FaEllipsisH } from "react-icons/fa";
@@ -23,23 +26,24 @@ export default function DetailPage() {
   const { useRightMenus } = useHeader();
   const { data } = useSWR<Detail>("/api/getDetail.json", fetcher);
   useRightMenus(() => <BsFillShareFill size="18px" />);
+  const { film, casts } = data ?? {};
 
   return (
-    <Layout.Page px="16px">
-      {data && (
-        <Container py="16px">
+    <Layout.Page p="0 !important">
+      {film && (
+        <Container p="16px" overflowX="hidden" overflowY="auto">
           <Box>
             <Flex>
-              <Image src={data.film.poster_url} w="20vw" h="auto" />
+              <Image src={film.poster_url} w="20vw" h="auto" />
               <Stack ml="20px">
                 <Text mt="20px">Reservation Ranking</Text>
                 <Text fontSize="24px" fontWeight={800} mt="12px !important">
-                  {data.film.korean_title}
+                  {film.korean_title}
                 </Text>
                 <Text>
-                  {`${data.film.year} ・ ${data.film.genres
+                  {`${film.year} ・ ${film.genres
                     .map(({ name }) => name)
-                    .join("/")} ・ ${data.film.countries
+                    .join("/")} ・ ${film.countries
                     .map(({ name }) => name)
                     .join("/")}`}
                 </Text>
@@ -78,43 +82,43 @@ export default function DetailPage() {
               </Center>
             </HStack>
           </Box>
+          <Box mt="16px">
+            <Text fontSize="xl" fontWeight="800">
+              출연/제작
+            </Text>
+            <Grid
+              as="ol"
+              mt="22px"
+              overflowX="auto"
+              overflowY="hidden"
+              mx="-16px"
+              css={{
+                grid: "repeat(3, 76px) / auto-flow 93%",
+              }}
+            >
+              {casts &&
+                casts.map(({ id, name, role, face_url }) => (
+                  <GridItem as="li" key={id} display="flex" w="100%" pl="16px">
+                    <Image
+                      src={face_url}
+                      w="56px"
+                      h="56px"
+                      borderRadius="6px"
+                    />
+                    <Box ml="16px" flex="1" borderBottom="1px solid #eee">
+                      <Text fontWeight="600">{name}</Text>
+                      <Text color="#777">{role}</Text>
+                    </Box>
+                  </GridItem>
+                ))}
+            </Grid>
+          </Box>
+          <Box h="100px" />
         </Container>
       )}
     </Layout.Page>
   );
 }
-
-const Detail = styled.div`
-  padding: 16px 12px;
-  article {
-    .row {
-      display: flex;
-    }
-
-    img {
-      width: 40vw;
-      height: auto;
-    }
-    .summary {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-
-      h1 {
-        font-size: 18px;
-      }
-
-      p {
-        margin-top: 12px;
-      }
-    }
-    .description {
-      margin-top: 20px;
-      line-height: 24px;
-    }
-  }
-`;
 
 interface Detail {
   film: {
