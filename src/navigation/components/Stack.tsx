@@ -118,7 +118,7 @@ export default React.memo(function Stack({
       noHeader={noHeader}
     >
       {children}
-      <PageInfo>
+      <PageInfo className="page-info">
         {level}: {path}
       </PageInfo>
     </Animated>
@@ -149,6 +149,7 @@ const Animated = styled(animated.div, {
 `;
 
 const PageInfo = styled.span`
+  display: none;
   position: absolute;
   right: 0;
   bottom: 0;

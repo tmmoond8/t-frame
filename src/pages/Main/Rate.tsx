@@ -44,7 +44,12 @@ export default function Rate() {
         borderBottom="1px solid #eee"
       >
         {moviesData?.movies?.map((movie) => (
-          <ListItem display="flex" p="16px 24px" key={movie.code}>
+          <ListItem
+            display="flex"
+            p="16px 24px"
+            position="relative"
+            key={movie.code}
+          >
             <Image
               src={movie.poster.medium}
               w="20vw"

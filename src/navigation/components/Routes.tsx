@@ -69,7 +69,7 @@ export default function Routes({ children }: Props) {
 
   return (
     <>
-      <StackInfo>
+      <StackInfo className="stack-info">
         <p>
           current:
           {stack.all.map(({ level, path }) => `${level}:${path}`).join(", ")}
@@ -85,6 +85,7 @@ export default function Routes({ children }: Props) {
 }
 
 const StackInfo = styled.div`
+  display: none;
   position: absolute;
   left: 0;
   bottom: 0;
