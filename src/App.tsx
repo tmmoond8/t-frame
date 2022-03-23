@@ -19,6 +19,7 @@ function App() {
         <Route path="/" title="Home" component={Pages.Home} noHeader />
         <Route path="/detail" title="Detail" component={Pages.Detail} />
         <Route path="/editor" title="Editor" component={Pages.Editor} />
+        <Route path="/person" title="Person" component={Pages.Person} />
       </Routes>
     </BrowserRouter>
   );

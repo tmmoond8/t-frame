@@ -9,8 +9,6 @@ import {
   Stack,
   Text,
   HStack,
-  List,
-  ListItem,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
@@ -18,11 +16,12 @@ import { IoIosStar, IoIosAdd, IoIosEye } from "react-icons/io";
 import { FaPencilAlt, FaEllipsisH } from "react-icons/fa";
 import { BsFillShareFill } from "react-icons/bs";
 import Layout from "../components/Layout";
-import { useHeader } from "../navigation";
+import { useHeader, useHistory } from "../navigation";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function DetailPage() {
+  const { history } = useHistory();
   const { useRightMenus } = useHeader();
   const { data } = useSWR<Detail>("/api/getDetail.json", fetcher);
   useRightMenus(() => <BsFillShareFill size="18px" />);
@@ -98,7 +97,17 @@ export default function DetailPage() {
             >
               {casts &&
                 casts.map(({ id, name, role, face_url }) => (
-                  <GridItem as="li" key={id} display="flex" w="100%" pl="16px">
+                  <GridItem
+                    as="li"
+                    key={id}
+                    display="flex"
+                    w="100%"
+                    pl="16px"
+                    cursor="pointer"
+                    onClick={() => {
+                      history.push("/person");
+                    }}
+                  >
                     <Image
                       src={face_url}
                       w="56px"
