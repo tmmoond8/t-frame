@@ -114,50 +114,25 @@ const Android: StackAnimation = {
     },
   },
 };
+
+const nonAnimation = {
+  from: {
+    transform: "translateX(0%)",
+  },
+  to: {
+    transform: "translateX(0%)",
+  },
+};
+
 const Web = {
   config: {
     duration: 0,
   },
-  fixed: {
-    from: {
-      transform: "translateX(0%)",
-    },
-    to: {
-      transform: "translateX(0%)",
-    },
-  },
-  slideIn: {
-    from: {
-      transform: "translateX(0%)",
-    },
-    to: {
-      transform: "translateX(0%)",
-    },
-  },
-  slideOut: {
-    from: {
-      transform: "translateX(0%)",
-    },
-    to: {
-      transform: "translateX(0%)",
-    },
-  },
-  fadeIn: {
-    from: {
-      transform: "translateX(0%)",
-    },
-    to: {
-      transform: "translateX(0%)",
-    },
-  },
-  fadeOut: {
-    from: {
-      transform: "translateX(0%)",
-    },
-    to: {
-      transform: "translateX(0%)",
-    },
-  },
+  fixed: nonAnimation,
+  slideIn: nonAnimation,
+  slideOut: nonAnimation,
+  fadeIn: nonAnimation,
+  fadeOut: nonAnimation,
 };
 
 export default {
