@@ -115,14 +115,16 @@ const TabButtons = styled.ol<{ currentIndex: number; count: number }>`
   width: 100%;
   position: relative;
   box-shadow: 0 -1px #ddd;
+  z-index: 10;
 
   &::after {
     content: "";
     position: absolute;
+    top: -1px;
     width: calc(100% / ${(p) => p.count});
     left: calc((100% / ${(p) => p.count}) * ${(p) => p.currentIndex});
     transition: left 0.2s ease-out;
-    height: 2px;
+    height: 1px;
     background-color: black;
   }
 `;
