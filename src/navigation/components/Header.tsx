@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Box, Flex } from "@chakra-ui/react";
 import { useHistory } from "../contexts/historyContext";
 import { useStack } from "../contexts/stackContext";
 import { useFocusEffect } from "../contexts/stackContext";
@@ -52,9 +51,7 @@ export default function Header({ screenOptions }: Props) {
     <>
       {!stack.current.noHeader && (
         <StyledHeader className="Header" style={headerStyle}>
-          <Box className="HeaderLeft">
-            <Link show={showBack} />
-          </Box>
+          <HeaderLeft show={showBack} />
           <Title
             className="HeaderTitle"
             style={titleStyle}
@@ -65,9 +62,7 @@ export default function Header({ screenOptions }: Props) {
           >
             {title}
           </Title>
-          <Flex className="HeaderRight" justifyContent="flex-end">
-            {rightMenu}
-          </Flex>
+          {rightMenu && <Right className="HeaderRight">{rightMenu}</Right>}
         </StyledHeader>
       )}
     </>
@@ -93,20 +88,25 @@ const Title = styled.h1`
   font-size: 16px;
 `;
 
-function Link({ show }: { show: boolean }) {
+function HeaderLeft({ show }: { show: boolean }) {
   const { history } = useHistory();
   return (
-    <Box
-      as="button"
-      visibility={show ? "visible" : "hidden"}
-      fontSize="24px"
-      fontWeight="800"
-      onClick={() => history.pop()}
-    >
-      ←
-    </Box>
+    <Left show={show} onClick={() => history.pop()}>
+      <button>←</button>
+    </Left>
   );
 }
+
+const Right = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Left = styled.div<{ show: boolean }>`
+  visibility: ${(p) => (p.show ? "visible" : "hidden")};
+  font-size: 24px;
+  font-weight: 800;
+`;
 
 export function useHeader() {
   const setOption = (options: {

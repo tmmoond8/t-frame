@@ -25,7 +25,7 @@ export default function PersonPage() {
   const { history } = useHistory();
   return (
     <Layout.Page p="0 !important">
-      <Container p="20px 16px" overflowY="auto" overflowX="hidden">
+      <Container p="20px 16px" overflowY="auto" overflowX="hidden" maxW="100%">
         <Flex>
           <Image
             src="https://an2-img.amz.wtchn.net/image/v2/DTqtAPMfegq0IkuARH4h1g.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1qUXdlREkwTUNKZExDSndJam9pTDNZeEwzQmxiM0JzWlM5dFpXUnBkVzB2TURrMU1XVmlObVZpWW1RME16STVOMkkwWm1VdWFuQm5JbjAuTFZqQk4tcFhPUGUyNDJqUU8zczUxTWhKcVVyWkpwR2dBVXI0dVR0c0NoUQ"

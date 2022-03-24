@@ -1,19 +1,19 @@
 {
   "name": "t-frame",
-  "version": "0.1.00",
+  "version": "0.1.01",
   "keywords": [
     "ui"
   ],
   "license": "MIT",
   "scripts": {
-    "build:test": "tsc -p tsconfig.json",
+    "build:test": "rm -rf build && rm -rf dist && tsc -p tsconfig.json",
     "pre-build": "rm -rf build && rm -rf dist && tsc -p tsconfig.json && yarn copy-svgs",
     "copy-svgs": "copyfiles -f ../src/components/Icon/icons/*.svg dist/components/Icon/icons",
     "build": "yarn pre-build && rollup -c",
     "deploy": "cd build && npm publish"
   },
-  "main": "build/index.js",
-  "module": "build/index.es.js",
+  "main": "index.js",
+  "module": "index.es.js",
   "types": "types/index.d.ts",
   "devDependencies": {
     "copyfiles": "^2.3.0",

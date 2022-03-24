@@ -30,7 +30,7 @@ export default function DetailPage() {
   return (
     <Layout.Page p="0 !important">
       {film && (
-        <Container p="16px" overflowX="hidden" overflowY="auto">
+        <Container p="16px" overflowX="hidden" overflowY="auto" maxW="100%">
           <Box>
             <Flex>
               <Image src={film.poster_url} w="20vw" h="auto" />

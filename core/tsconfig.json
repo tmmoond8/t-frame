@@ -4,7 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "baseUrl": ".",
     "paths": {
-      "t-frame": ["../src/index"]
+      "t-frame": ["../src/navigation/index"]
     },
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,6 +20,6 @@
     "noImplicitAny": true,
     "outDir": "dist"
   },
-  "include": ["../src"],
+  "include": ["../src/navigation"],
   "exclude": ["node_modules"]
 }
