@@ -6,5 +6,5 @@ export { useHeader } from "./components/Header";
 export { default as BrowserRouter } from "./components/BrowserRouter";
 export { useHistory } from "./contexts/historyContext";
 export { useFocusEffect } from "./contexts/stackContext";
-export type { Platform } from "./types";
+export type { Platform, GestureData } from "./types";
 export { usePlatform } from "./contexts/uiContext";

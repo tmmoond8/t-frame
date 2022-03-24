@@ -1,0 +1,48 @@
+{
+  "name": "t-frame",
+  "version": "0.1.00",
+  "keywords": [
+    "ui"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build:test": "tsc -p tsconfig.json",
+    "pre-build": "rm -rf build && rm -rf dist && tsc -p tsconfig.json && yarn copy-svgs",
+    "copy-svgs": "copyfiles -f ../src/components/Icon/icons/*.svg dist/components/Icon/icons",
+    "build": "yarn pre-build && rollup -c",
+    "deploy": "cd build && npm publish"
+  },
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "types": "types/index.d.ts",
+  "devDependencies": {
+    "copyfiles": "^2.3.0",
+    "rollup": "^2.70.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-url": "^3.0.1",
+    "typescript": "^4.4.2"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
