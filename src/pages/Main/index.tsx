@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { IoMdHome, IoMdSearch, IoIosStar, IoMdPerson } from "react-icons/io";
-import { Tabs, Tab } from "../../tab";
+import { Tabs, Tab } from "../../navigation";
 import Home from "./Home";
 import Search from "./Search";
 import Rate from "./Rate";
