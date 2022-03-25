@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "jsx": "react",
     "declaration": true,
-    "declarationDir": "build/types",
+    "declarationDir": "build",
     "noImplicitAny": true,
     "outDir": "dist"
   },
