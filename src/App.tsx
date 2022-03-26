@@ -1,4 +1,5 @@
 import React from "react";
+import { IoIosArrowBack } from "react-icons/io";
 import { Route, BrowserRouter, Routes, Platform } from "./navigation";
 import * as Pages from "./pages";
 
@@ -13,6 +14,7 @@ function App() {
         headerTitleStyle: {
           fontWeight: "bold",
         },
+        backIcon: <IoIosArrowBack />,
       }}
     >
       <Routes>

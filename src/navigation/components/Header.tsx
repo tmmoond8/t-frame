@@ -11,14 +11,18 @@ interface Props {
     headerStyle?: React.CSSProperties;
     headerTintColor?: string;
     headerTitleStyle?: React.CSSProperties;
+    backIcon?: React.ReactNode;
   };
 }
+
+export type ScreenOptions = Props;
 
 export default function Header({ screenOptions }: Props) {
   const {
     headerStyle = {},
     headerTintColor,
     headerTitleStyle = {},
+    backIcon = "←",
   } = screenOptions ?? {};
   const [title, setTitle] = React.useState("");
   const [showBack, setShowBack] = React.useState(false);
@@ -51,7 +55,7 @@ export default function Header({ screenOptions }: Props) {
     <>
       {!stack.current.noHeader && (
         <StyledHeader className="Header" style={headerStyle}>
-          <HeaderLeft show={showBack} />
+          <HeaderLeft show={showBack} backIcon={backIcon} />
           <Title
             className="HeaderTitle"
             style={titleStyle}
@@ -88,11 +92,17 @@ const Title = styled.h1`
   font-size: 16px;
 `;
 
-function HeaderLeft({ show }: { show: boolean }) {
+function HeaderLeft({
+  show,
+  backIcon,
+}: {
+  show: boolean;
+  backIcon: React.ReactNode;
+}) {
   const { history } = useHistory();
   return (
     <Left show={show} onClick={() => history.pop()}>
-      <button>←</button>
+      <button>{backIcon}</button>
     </Left>
   );
 }

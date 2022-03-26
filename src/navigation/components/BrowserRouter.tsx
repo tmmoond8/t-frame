@@ -3,18 +3,13 @@ import styled from "@emotion/styled";
 import Router from "./Router";
 import { StackContextProvider } from "../contexts/stackContext";
 import { UiContextProvider } from "../contexts/uiContext";
-import Header from "./Header";
+import Header, { ScreenOptions } from "./Header";
 import DevLog from "./DevLog";
 import type { Platform } from "../types";
 
-interface Props {
+interface Props extends ScreenOptions {
   children: React.ReactNode;
   defaultPlatform: Platform;
-  screenOptions?: {
-    headerStyle: React.CSSProperties;
-    headerTintColor?: string;
-    headerTitleStyle: React.CSSProperties;
-  };
 }
 
 export default function BrowserRouter({
