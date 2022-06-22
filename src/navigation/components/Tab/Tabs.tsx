@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
@@ -10,7 +10,6 @@ interface Props {
 export default function Tabs({ children, className }: Props) {
   const childrenType = toString.call(children);
   const tabIndex = React.useRef(0);
-  const prevTabIndex = React.useRef(0);
   const activatedTabs = React.useRef<Set<string>>(new Set());
   const routes = React.useMemo(() => {
     return childrenType === "[object Array]" ? (children as any[]) : [children];
@@ -22,33 +21,23 @@ export default function Tabs({ children, className }: Props) {
 
   activatedTabs.current.add(currentTab);
 
-  const getTranslateDirection = (index: number) => {
-    let translateDirection: "none" | "right" | "left" = "none";
-    if (tabIndex.current > index) {
-      translateDirection = "right";
-    }
-    if (tabIndex.current < index) {
-      translateDirection = "left";
-    }
-    return translateDirection;
-  };
-
   return (
     <StyledTabs className={className}>
       <Body className="TabContent">
-        {routes.map(({ props }, i) => {
-          const Component = props.component;
-          return (
-            <TabWrapper
-              key={props.name}
-              className="TabPageWrapper"
-              isCurrentTab={props.name === currentTab}
-              translateDirection={getTranslateDirection(i)}
-            >
-              <Component />
-            </TabWrapper>
-          );
-        })}
+        {routes
+          .filter(({ props }) => activatedTabs.current.has(props.name))
+          .map(({ props }) => {
+            const Component = props.component;
+            return (
+              <TabWraper
+                key={props.name}
+                className="TabPageWrapper"
+                isCurrentTab={props.name === currentTab}
+              >
+                <Component />
+              </TabWraper>
+            );
+          })}
       </Body>
       <TabButtons
         className="TabButtons"
@@ -62,7 +51,6 @@ export default function Tabs({ children, className }: Props) {
             key={props.name}
             onClick={() => {
               setCurrentTab(props.name);
-              prevTabIndex.current = tabIndex.current;
               tabIndex.current = index;
             }}
           >
@@ -83,17 +71,24 @@ const StyledTabs = styled.ol`
   width: 100%;
 `;
 
-const TabWrapper = styled.section<{
-  isCurrentTab: boolean;
-  translateDirection: "right" | "left" | "none";
-}>`
+const fadeIn = keyframes`
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const TabWraper = styled.section<{ isCurrentTab: boolean }>`
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: white;
-  transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
   overflow-x: hidden;
   overflow-y: auto;
+  animation: ${fadeIn} 0.3s ease-in-out;
   ${(p) =>
     p.isCurrentTab
       ? css`
@@ -103,24 +98,9 @@ const TabWrapper = styled.section<{
         `
       : css`
           z-index: 0;
-          opacity: 0.7;
+          opacity: 0.4;
           visibility: hidden;
         `}
-  ${(p) =>
-    p.translateDirection === "right" &&
-    css`
-      transform: translateX(20px);
-    `}
-  ${(p) =>
-    p.translateDirection === "left" &&
-    css`
-      transform: translateX(-20px);
-    `}
-  ${(p) =>
-    p.translateDirection === "none" &&
-    css`
-      transform: translateX(0);
-    `}
 `;
 
 const Body = styled.main`
