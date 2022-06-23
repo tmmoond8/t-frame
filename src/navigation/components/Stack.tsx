@@ -62,7 +62,7 @@ export default React.memo(function Stack({
     focusShadowValue.current = isFocusing;
     if (skipAnimationRef.current && isPopped) {
       setAnimation(platformAnimation.slideOut);
-      setNoAnimatedX("translateX(100%) !important");
+      setNoAnimatedX("translate3d(100%, 0, 0) !important");
       return;
     }
     if (isPopped) {
@@ -72,12 +72,12 @@ export default React.memo(function Stack({
     }
     if (skipAnimation && !isFocusing) {
       setAnimation(platformAnimation.slideOut);
-      setNoAnimatedX("translateX(100%) !important");
+      setNoAnimatedX("translate3d(100%, 0, 0) !important");
       return;
     }
     if (skipAnimation && isFocusing) {
       setAnimation(platformAnimation.slideIn);
-      setNoAnimatedX("translateX(0%) !important");
+      setNoAnimatedX("translate3d(0%, 0, 0) !important");
       return;
     }
     if (!isFocusing) {
@@ -138,7 +138,7 @@ const Animated = styled(animated.div, {
   left: 0;
   width: 100%;
   height: ${(p) => (p.noHeader ? "100%" : "calc(100% - 56px)")};
-  transform: translateX(100%);
+  transform: translate3d(100%, 0, 0);
   background-color: white;
   z-index: ${(p) => p.level};
   ${(p) =>

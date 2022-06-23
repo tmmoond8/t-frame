@@ -16,46 +16,48 @@ const Cupertino: StackAnimation = {
   },
   fixed: {
     from: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
+      opacity: 1,
     },
     to: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
+      opacity: 1,
     },
   },
   slideIn: {
     from: {
-      transform: "translateX(100%)",
+      transform: "translate3d(100%, 0, 0)",
     },
     to: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
       opacity: 1,
     },
   },
   slideOut: {
     from: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
     },
     to: {
-      transform: "translateX(100%)",
+      transform: "translate3d(100%, 0, 0)",
     },
   },
   fadeIn: {
     from: {
-      transform: "translateX(-20%)",
+      transform: "translate3d(-20%, 0, 0)",
       opacity: 0.4,
     },
     to: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
       opacity: 1,
     },
   },
   fadeOut: {
     from: {
-      transform: "translateX(0%)",
+      transform: "translate3d(0%, 0, 0)",
       opacity: 1,
     },
     to: {
-      transform: "translateX(-20%)",
+      transform: "translate3d(-20%, 0, 0)",
       opacity: 0.4,
     },
   },
@@ -67,49 +69,51 @@ const Android: StackAnimation = {
   },
   fixed: {
     from: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
+      opacity: 1,
     },
     to: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
+      opacity: 1,
     },
   },
   slideIn: {
     from: {
-      transform: "translateY(20%)",
+      transform: "translate3d(0, 20%, 0)",
       opacity: 0.5,
     },
     to: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
       opacity: 1,
     },
   },
   slideOut: {
     from: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
       opacity: 1,
     },
     to: {
-      transform: "translateY(20%)",
+      transform: "translate3d(0, 20%, 0)",
       opacity: 0.2,
     },
   },
   fadeIn: {
     from: {
-      transform: "translateY(-6%)",
+      transform: "translate3d(0, -6%, 0)",
       opacity: 0.6,
     },
     to: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
       opacity: 1,
     },
   },
   fadeOut: {
     from: {
-      transform: "translateY(0%)",
+      transform: "translate3d(0, 0%, 0)",
       opacity: 1,
     },
     to: {
-      transform: "translateY(-6%)",
+      transform: "translate3d(0, -6%, 0)",
       opacity: 0.6,
     },
   },
@@ -117,10 +121,10 @@ const Android: StackAnimation = {
 
 const nonAnimation = {
   from: {
-    transform: "translateX(0%)",
+    transform: "translate3d(0%, 0, 0)",
   },
   to: {
-    transform: "translateX(0%)",
+    transform: "translate3d(0%, 0, 0)",
   },
 };
 

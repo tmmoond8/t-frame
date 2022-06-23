@@ -21,23 +21,33 @@ export default function Tabs({ children, className }: Props) {
 
   activatedTabs.current.add(currentTab);
 
+  const getTranslateDirection = (index: number) => {
+    let translateDirection: "none" | "right" | "left" = "none";
+    if (tabIndex.current > index) {
+      translateDirection = "right";
+    }
+    if (tabIndex.current < index) {
+      translateDirection = "left";
+    }
+    return translateDirection;
+  };
+
   return (
     <StyledTabs className={className}>
       <Body className="TabContent">
-        {routes
-          .filter(({ props }) => activatedTabs.current.has(props.name))
-          .map(({ props }) => {
-            const Component = props.component;
-            return (
-              <TabWraper
-                key={props.name}
-                className="TabPageWrapper"
-                isCurrentTab={props.name === currentTab}
-              >
-                <Component />
-              </TabWraper>
-            );
-          })}
+        {routes.map(({ props }, i) => {
+          const Component = props.component;
+          return (
+            <TabWrapper
+              key={props.name}
+              className="TabPageWrapper"
+              isCurrentTab={props.name === currentTab}
+              translateDirection={getTranslateDirection(i)}
+            >
+              <Component />
+            </TabWrapper>
+          );
+        })}
       </Body>
       <TabButtons
         className="TabButtons"
@@ -80,23 +90,44 @@ const fadeIn = keyframes`
   }
 `;
 
-const TabWraper = styled.section<{ isCurrentTab: boolean }>`
+const TabWrapper = styled.section<{
+  isCurrentTab: boolean;
+  translateDirection: "right" | "left" | "none";
+}>`
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: white;
+  transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
   overflow-x: hidden;
   overflow-y: auto;
   ${(p) =>
     p.isCurrentTab
       ? css`
           z-index: 10;
+          opacity: 1;
           visibility: visible;
         `
       : css`
           z-index: 0;
+          opacity: 0.4;
           visibility: hidden;
         `}
+  ${(p) =>
+    p.translateDirection === "right" &&
+    css`
+      transform: translate3d(20px, 0, 0);
+    `}
+  ${(p) =>
+    p.translateDirection === "left" &&
+    css`
+      transform: translate3d(-20px, 0, 0);
+    `}
+  ${(p) =>
+    p.translateDirection === "none" &&
+    css`
+      transform: translate3d(0, 0, 0);
+    `}
 `;
 
 const Body = styled.main`
