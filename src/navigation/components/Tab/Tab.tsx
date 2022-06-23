@@ -3,6 +3,7 @@ import React from "react";
 interface Props {
   component: React.FC;
   name: string;
+  path: string;
   icon?: React.ReactNode;
 }
 

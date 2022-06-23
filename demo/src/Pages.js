@@ -10,10 +10,10 @@ export default {
 function Main() {
   return (
     <Tabs>
-      <Tab name="홈" component={Home} />
-      <Tab name="검색" component={Search} />
-      <Tab name="평가" component={Rate} />
-      <Tab name="나의 왓챠" component={MyWatcha} />
+      <Tab name="홈" component={Home} path="/" />
+      <Tab name="검색" component={Search} path="/search" />
+      <Tab name="평가" component={Rate} path="/rate" />
+      <Tab name="나의 왓챠" component={MyWatcha} path="/my" />
     </Tabs>
   );
 }

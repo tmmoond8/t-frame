@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { css, keyframes } from "@emotion/react";
+import { css } from "@emotion/react";
+import { useUiContext } from "../../contexts/uiContext";
 
 interface Props {
   children: React.ReactNode;
@@ -8,21 +9,28 @@ interface Props {
 }
 
 export default function Tabs({ children, className }: Props) {
+  const { platform } = useUiContext();
+
   const childrenType = toString.call(children);
-  const tabIndex = React.useRef(0);
   const activatedTabs = React.useRef<Set<string>>(new Set());
   const routes = React.useMemo(() => {
     return childrenType === "[object Array]" ? (children as any[]) : [children];
   }, [childrenType, children]);
+  const tabIndex = React.useRef(
+    routes.findIndex(({ props }) => globalThis.location.pathname === props.path)
+  );
 
   const [currentTab, setCurrentTab] = React.useState(
-    routes.length === 0 ? null : routes[0].props.name
+    routes.length === 0 ? null : routes[tabIndex.current].props.name
   );
 
   activatedTabs.current.add(currentTab);
 
   const getTranslateDirection = (index: number) => {
     let translateDirection: "none" | "right" | "left" = "none";
+    if (platform === "Android" || platform === "Web") {
+      return translateDirection;
+    }
     if (tabIndex.current > index) {
       translateDirection = "right";
     }
@@ -62,6 +70,7 @@ export default function Tabs({ children, className }: Props) {
             onClick={() => {
               setCurrentTab(props.name);
               tabIndex.current = index;
+              globalThis.history.replaceState(null, "", props.path);
             }}
           >
             {props.icon && <Icon className="TabIcon">{props.icon}</Icon>}
@@ -79,15 +88,6 @@ const StyledTabs = styled.ol`
   position: relative;
   height: 100%;
   width: 100%;
-`;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0.4;
-  }
-  to {
-    opacity: 1;
-  }
 `;
 
 const TabWrapper = styled.section<{
